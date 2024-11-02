@@ -1,3 +1,5 @@
+package main.java;
+
 import java.io.*;      // For input/output operations
 import java.net.*;     // For network/socket operations
 import javax.swing.*;  // For creating GUI elements
