@@ -1,4 +1,4 @@
-package main.java;
+package src.main.java;
 
 import java.io.*;      // For input/output operations
 import java.net.*;     // For network/socket operations
