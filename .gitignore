@@ -1,4 +1,10 @@
-/Server.class
-/ClientHandler.class
-/GUIHandler.class
-/Client.class
+# Eclipse
+.metadata/
+.classpath
+.project
+.settings/
+
+# macOS
+.DS_Store
+.DS_Store?
+._*
