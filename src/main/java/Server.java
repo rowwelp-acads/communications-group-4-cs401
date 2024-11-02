@@ -1,3 +1,5 @@
+package main.java;
+
 import java.io.*;      // For input/output operations
 import java.net.*;     // For network/socket operations
 import java.util.*;    // For using Map and other collections
