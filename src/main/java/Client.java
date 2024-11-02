@@ -25,7 +25,7 @@ public class Client {
 /////////////////////// /////////////////////// /////////////////////// /////////////////////// /////////////////////// /////////////////////// 
     
     // Add PORT as a constant
-    private static final int PORT = 1000;
+    private static final int PORT = 8888;
 
     // Constructor
     public Client() {

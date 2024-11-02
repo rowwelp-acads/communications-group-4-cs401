@@ -6,7 +6,7 @@ import java.util.*;    // For using Map and other collections
 
 public class Server {
     // Port number the server will listen on - must match what clients use
-    private static final int PORT = 1000;
+    private static final int PORT = 8888;
     
     // This Map keeps track of all connected clients
     // Key: client ID (String), Value: the client's handler
