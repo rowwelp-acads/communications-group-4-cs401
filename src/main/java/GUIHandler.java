@@ -1,3 +1,5 @@
+package main.java;
+
 import javax.swing.*;  // For creating GUI elements
 import java.awt.*;    // For additional GUI components
 
