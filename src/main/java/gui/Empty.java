@@ -1,4 +1,4 @@
-package src.main.java.gui;
+package main.java.gui;
 
 public class Empty {
 	// this is just placeholder
