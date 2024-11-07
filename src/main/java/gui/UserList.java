@@ -32,6 +32,7 @@ public class UserList {
             
             // Add OK button to close dialog
             JButton okButton = new JButton("OK");
+            // Pressing OK closes it
             okButton.addActionListener(event -> dialog.dispose());
             dialog.add(okButton);
             
