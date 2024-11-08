@@ -25,7 +25,7 @@ public class ConvoLog {
 		
 		JList convoList = new JList(testLog);
 		logContainer.add(new JScrollPane(convoList));
-		convoList.setEnabled(false);
+		convoList.setEnabled(true);
 		
 		buttonContainer.setLayout(new BoxLayout(buttonContainer, BoxLayout.X_AXIS));
 		buttonContainer.add(viewHistoryButton);
@@ -55,8 +55,7 @@ public class ConvoLog {
 		}
 	}
 
-	//test
-	public static void main(String[] args) {
+	public void openConversationLog() {
 		new ConvoLog();
 	}
 	
