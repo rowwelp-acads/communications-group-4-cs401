@@ -15,16 +15,21 @@ public class LogInFrame {
     private JButton cancelButton;
 
     public LogInFrame() {
-        LogInFrameUI();
+    	openLoginWindow();
+    }
+    
+    public void openLoginWindow() {
+    	LogInFrameUI();
     }
 
     private void LogInFrameUI() {
         // Create the main frame
-        frame = new JFrame("Log-In Frame");
+    	frame = new JFrame("Log-In Frame");
+
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(500, 550);			// Set the size of the frame on open
         frame.setLocationRelativeTo(null); // Center on screen
-        
+        System.out.println("Here");
         // Main Panel with BoxLayout
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
@@ -89,6 +94,7 @@ public class LogInFrame {
                 String password = new String(passwordField.getPassword());
                 // Insert login logic here
                 JOptionPane.showMessageDialog(frame, "Login clicked: [" + username + "] Entered the password [" + password + "]");
+                MainHub newHub = new MainHub();
             }
         });
 
@@ -109,9 +115,11 @@ public class LogInFrame {
         // Add mainpanel to the frame
         frame.add(mainPanel);
         frame.setVisible(true);
+        System.out.println("Here");
     }
 
-    public static void main(String[] args) {
-        LogInFrame LogInUI = new LogInFrame();
-    }
+//    public static void main(String[] args) {
+//    	LogInFrame logIn = new LogInFrame();
+//    	logIn.openLoginWindow();
+//    }
 }

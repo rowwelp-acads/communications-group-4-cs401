@@ -1,6 +1,9 @@
 package main.java;
 
 import javax.swing.*;  // For creating GUI elements
+
+import main.java.gui.LogInFrame;
+
 import java.awt.*;    // For additional GUI components
 
 public class GUIHandler {
@@ -13,6 +16,7 @@ public class GUIHandler {
     // Constructor - called when a new GUIHandler is created
     public GUIHandler(Client client) {
         this.client = client;
+        
     }
 
     // Creates and shows the login interface
@@ -21,6 +25,11 @@ public class GUIHandler {
         IMPLEMENT:
         1. Create a window (JFrame) for login
         */
+    	
+    	LogInFrame logIn = new LogInFrame();
+    	//logIn.openLoginWindow();
+    	
+    	
     }
 
     // Creates and shows the chat interface
