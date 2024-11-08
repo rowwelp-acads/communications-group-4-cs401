@@ -63,6 +63,7 @@ public class ChatRoom {
 		optionsPanel.add(userListButton);
 		
 		userListButton.addActionListener(e -> {
+			/*
 			JDialog dialog = new JDialog(chatroomFrame, "UserListButton clicked", true);
 			dialog.setLayout(new FlowLayout());
 			dialog.add(new JLabel("You pressed the UserListButton"));
@@ -75,7 +76,10 @@ public class ChatRoom {
 			dialog.setSize(250, 100);
 			dialog.setLocationRelativeTo(chatroomFrame);
 			dialog.setVisible(true);
+			*/
 			
+			UserList thisChatUserList = new UserList();
+			thisChatUserList.openUserList();
 		});
 		
 		chatroomFrame.add(chatPanel);
@@ -92,10 +96,10 @@ public class ChatRoom {
 		new ChatRoom();
 	}
 	
-	/*
+	
 	public static void main(String args[]) {
 		ChatRoom chatroom = new ChatRoom();
 		//chatroom.openChatroom();
 	}
-	*/
+	
 }
