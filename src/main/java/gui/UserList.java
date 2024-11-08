@@ -73,8 +73,8 @@ public class UserList {
         userListFrame.setVisible(visible);
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
+    public static void openUserList() {
+    	SwingUtilities.invokeLater(() -> {
             UserList window = new UserList();
             window.setVisible(true);
         });
