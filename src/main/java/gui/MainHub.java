@@ -112,7 +112,9 @@ public class MainHub {
 	/*
 	 * main method here for testing only
 	 */
+	/*
 	public static void main(String[] args) {
 		new MainHub();
 	}
+	*/
 }
