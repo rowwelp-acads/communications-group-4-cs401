@@ -10,6 +10,7 @@ public class Message {
 	private MESSAGETYPE type;
 	
 	
+	
 	public Message(String content, UserAccount sender) {
 		this.sender = sender;
 		this.content = content;
