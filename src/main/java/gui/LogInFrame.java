@@ -95,6 +95,7 @@ public class LogInFrame {
                 // Insert login logic here
                 JOptionPane.showMessageDialog(frame, "Login clicked: [" + username + "] Entered the password [" + password + "]");
                 MainHub newHub = new MainHub();
+                frame.dispose();
             }
         });
 
