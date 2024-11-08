@@ -12,6 +12,9 @@ import javax.swing.event.ListSelectionListener;
  * add buttons and JList to panels.
  * add panels to JFrame
  * add functionalities
+ * 
+ * grey out the IT button
+ * change boxlayout gridlayout
  *  
  */
 public class MainHub {
@@ -31,13 +34,18 @@ public class MainHub {
 							"Coworker-1 private chat",
 							"Manager private chat"};
 	public MainHub() {
+	}
+	
+	public void openMainHub() {
 		
 		JList chatList = new JList(chatExample);
 		chatsContainer.add(new JScrollPane(chatList));
 		
 		buttonContainer.setLayout(new BoxLayout(buttonContainer, BoxLayout.X_AXIS));
 		
+		itButton.setEnabled(false);
 		buttonContainer.add(itButton);
+		
 		buttonContainer.add(createPrivateChatButton);
 		buttonContainer.add(createGroupChatButton);
 		buttonContainer.add(deleteChatButton);
