@@ -4,6 +4,8 @@ import java.io.*;      // For input/output operations
 import java.net.*;     // For network/socket operations
 import javax.swing.*;  // For creating GUI elements
 
+import main.java.gui.LogInFrame;
+
 public class Client {
     // Socket for connecting to the server
     private Socket socket;
@@ -41,7 +43,7 @@ public class Client {
     // Sets up the initial GUI
     private void setupGUI() {
         // Tell the GUI handler to create the login interface
-        guiHandler.setupLoginInterface();
+    	guiHandler.setupLoginInterface();
     }
 
     // Connects to the server
