@@ -109,13 +109,5 @@ public class MainHub {
 		
 	}
 	
-	/*
-	 * main method here for testing only
-	 * comment out when done with testing
-	 */
-	/*
-	public static void main(String[] args) {
-		new MainHub();
-	}
-	*/
+
 }
