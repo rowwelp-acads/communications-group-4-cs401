@@ -8,6 +8,8 @@ public class Message {
 	private String content;
 	private Date timestamp;
 	private MESSAGETYPE type;
+	private String password;
+	
 	
 	
 	public Message(String content, UserAccount sender) {
