@@ -63,6 +63,7 @@ public class ClientHandler extends Thread {
 						String verificationResult = Server.verify(objectIn);
 						// message to be return to sender
 						Message returnVerification = new Message(verificationResult, objectIn.getSender(), objectIn.getRecipients());
+						returnVerification.setMessageType(MESSAGETYPE.LOGINTOSEND);
 						// return message
 						objectOutputStream.writeObject(returnVerification);
 						objectOutputStream.flush();					
@@ -74,7 +75,12 @@ public class ClientHandler extends Thread {
 					}
 					// disconnect request
 					else if (objectIn.getType() == MESSAGETYPE.DISCONNECT) {
-						// send disconnect message back to user?
+						// send disconnect message back to client
+						Message disconnect = new Message("Disconnecting", objectIn.getSender(), objectIn.getRecipients());
+						disconnect.setMessageType(MESSAGETYPE.DISCONNECT);
+						objectOutputStream.writeObject(disconnect);
+						
+						objectOutputStream.flush();
 						break;
 					}
 				} catch (Exception e) {

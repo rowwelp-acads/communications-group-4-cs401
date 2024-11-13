@@ -39,31 +39,6 @@ public class Server {
     }
     
     /*
-    public void startServer() {
-        try {
-            // Create a ServerSocket that listens for client connections on the specified port
-            ServerSocket serverSocket = new ServerSocket(PORT);
-            System.out.println("Server is running on port " + PORT);
-            
-            // Keep the server running forever
-            while (true) {
-                // .accept() waits for a client to connect
-                // When a client connects, it returns a Socket for that connection
-                Socket socket = serverSocket.accept();
-                
-                // Create a new handler for this client and start it on its own thread
-                ClientHandler clientHandler = new ClientHandler(socket, database);
-                // start client thread
-                clientHandler.start();
-            }
-        } catch (IOException e) {
-            // If something goes wrong, print the error
-            e.printStackTrace();
-        }
-    }
-    */
-    
-    /*
      * method to send message between ClientHandlers
      * called in ClientHandler
      */

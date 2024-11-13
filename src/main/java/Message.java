@@ -20,9 +20,17 @@ public class Message implements Serializable {
 	private String username;
 	private String password;
 	
-	
 	// CONSTRUCTORS
 	// Regular Chat Messages
+	public Message(String content, UserAccount sender) {
+		this.sender = sender;
+		this.content = content;
+		this.timestamp = new Date();
+		this.type = MESSAGETYPE.MESSAGETOSEND;
+	}
+	
+	// CONSTRUCTORS
+	// Regular Chat Messages with recipients
 	public Message(String content, UserAccount sender, UserAccount[] recipients) {
 		this.sender = sender;
 		this.content = content;
@@ -77,6 +85,9 @@ public class Message implements Serializable {
 		return type == MESSAGETYPE.LOGINTOSEND;
 	}
 	
+	public void setMessageType(MESSAGETYPE type) {
+		this.type = type;
+	}
 	
 	
 	
