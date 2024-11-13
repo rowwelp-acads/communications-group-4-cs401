@@ -31,6 +31,7 @@ public class Message implements Serializable {
 	
 	// CONSTRUCTORS
 	// Regular Chat Messages with recipients
+	// added by Johnny
 	public Message(String content, UserAccount sender, UserAccount[] recipients) {
 		this.sender = sender;
 		this.content = content;
