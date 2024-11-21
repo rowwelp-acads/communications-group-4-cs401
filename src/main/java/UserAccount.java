@@ -1,5 +1,6 @@
 package main.java;
-// TODO: Write JUnit tests!
+// TODO: Write JUnit tests! @BryanMadrigal
+// TODO: Comment all class methods!
 public class UserAccount {
 	// Attributes.
 	private static int num = 0;
