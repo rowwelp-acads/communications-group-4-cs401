@@ -54,7 +54,7 @@ public class Chat {
 	        activeParticipants.remove(userToRemove);
 	        
 	        String systemMessageContent = username + " has left the chat.";
-	        Message systemMessage = new Message(systemMessageContent, null); // System messages may not have a sender
+	        Message systemMessage = new Message(systemMessageContent, null);
 	        messages.add(systemMessage);
 	        
 	        System.out.println("User " + username + " removed from chat.");
