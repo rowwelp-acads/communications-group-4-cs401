@@ -1,23 +1,24 @@
 package main.java;
 
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.*;
 
 public class Chat {
-	private int uniqueID;
-	private static int count = 0;
-	
-	
-	
-	private List<UserAccount> participants;
-	// private List<UserAccount> activeParticipants;
-	private ConversationHistory history;
-	private String name;
-	private UserAccount creator;
+    private int uniqueID;
+    private static int count = 0;
+    private List<UserAccount> participants;
+    private ConversationHistory history;
+    private String name;
+    private UserAccount creator;
+    private List<Message> messages;
+    private ObjectOutputStream serverOutputStream; 
 
-	public Chat(UserAccount owner) {
+	public Chat(UserAccount owner, ObjectOutputStream outputStream) {
 		creator = owner;
 		history = new ConversationHistory();
 		uniqueID = count++;
+		serverOutputStream = outputStream;
 	}
 
 	// IF GUI BUTTON PRESSED
@@ -28,6 +29,12 @@ public class Chat {
 	public void sendMessage(String content, UserAccount sender) {
 		Message newMessage = new Message(content, sender, uniqueID);
 		
+        try {
+            serverOutputStream.writeObject(newMessage);
+            serverOutputStream.flush();
+        } catch (IOException e) {
+            System.err.println("Error sending message to server: " + e.getMessage());
+        }
 	}
 
 	

@@ -32,6 +32,10 @@ public class Client {
     // Add PORT as a constant
     private static final int PORT = 8888;
 
+    
+    private ObjectOutputStream outputStream;
+    private ObjectInputStream inputStream;
+    
     // Constructor
     public Client() {
         // Create the GUI handler first
