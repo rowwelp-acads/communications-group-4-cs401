@@ -73,6 +73,15 @@ public class UserAccount {
 	 // 1. chatRoom.remove(chat);
   }
 
+  // function that gets the current active chat
+  public Chat getChat() {
+	  Chat activeChat;
+	  
+	  
+	  
+	  return activeChat;
+  }
+  
   @Override
   public String toString() {
 	  return "UserAccount [userId=" + userId + ",username=" + username + ",email=" + email + "]";

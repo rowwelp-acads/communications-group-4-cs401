@@ -22,8 +22,12 @@ public class Chat {
 
 	// IF GUI BUTTON PRESSED
 	// ACTIONLISTENER CALLS SENDMESSAGE
+	// Content is taken from the GUI
+	// UserAccount is also taken from the GUI
+	// When you input a message in the text input field, it should contain values for content and UserAccount
 	public void sendMessage(String content, UserAccount sender) {
-		Message newMessage = new Message(content, sender);	
+		Message newMessage = new Message(content, sender, uniqueID);
+		
 	}
 
 	

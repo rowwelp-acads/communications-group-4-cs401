@@ -16,6 +16,9 @@ public class Client {
     // Handles all GUI operations
     private GUIHandler guiHandler;
     
+    // Account Holder
+    private UserAccount owner;
+    
 /////////////////////// /////////////////////// /////////////////////// /////////////////////// /////////////////////// /////////////////////// 
 /////////////////////// /////////////////////// /////////////////////// /////////////////////// /////////////////////// /////////////////////// 
 /////////////////////// /////////////////////// /////////////////////// /////////////////////// /////////////////////// /////////////////////// 
@@ -63,6 +66,15 @@ public class Client {
         }
     }
 
+    public void sendMessage() {
+    	// 
+    	owner.getChat();
+    	// STEPS:
+    	// 1. Get Chat ID
+    	// 2. 
+    	
+    }
+    
     public static void main(String[] args) {
         // Start the client on the Event Dispatch Thread
         // This is important for GUI applications
@@ -70,4 +82,6 @@ public class Client {
             new Client();
         });
     }
+    
+    
 }
