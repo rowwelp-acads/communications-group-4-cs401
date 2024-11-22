@@ -8,6 +8,9 @@ public class Chat {
 	private List<UserAccount> activeParticipants;
 	private List<Message> messages;
 	
+	public Chat() {
+		
+	}
 	
 	public void addParticipant(String username) {
 		// Implement it here...
