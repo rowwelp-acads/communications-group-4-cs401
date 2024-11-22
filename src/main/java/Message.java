@@ -14,6 +14,7 @@ public class Message implements Serializable {
 	private Date timestamp;
 	private MESSAGETYPE type;
 	private UserAccount[] recipients;
+	private int chatID;
 	
 	// Content for Log In Messages
 	
@@ -22,11 +23,12 @@ public class Message implements Serializable {
 	
 	// CONSTRUCTORS
 	// Regular Chat Messages
-	public Message(String content, UserAccount sender) {
+	public Message(String content, UserAccount sender, int chatID) {
 		this.sender = sender;
 		this.content = content;
 		this.timestamp = new Date();
 		this.type = MESSAGETYPE.MESSAGETOSEND;
+		this.chatID = chatID;
 	}
 	
 	// CONSTRUCTORS

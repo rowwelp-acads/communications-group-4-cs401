@@ -16,6 +16,9 @@ public class Client {
     // Handles all GUI operations
     private GUIHandler guiHandler;
     
+    // Account Holder
+    private UserAccount owner;
+    
 /////////////////////// /////////////////////// /////////////////////// /////////////////////// /////////////////////// /////////////////////// 
 /////////////////////// /////////////////////// /////////////////////// /////////////////////// /////////////////////// /////////////////////// 
 /////////////////////// /////////////////////// /////////////////////// /////////////////////// /////////////////////// /////////////////////// 
@@ -29,6 +32,10 @@ public class Client {
     // Add PORT as a constant
     private static final int PORT = 8888;
 
+    
+    private ObjectOutputStream outputStream;
+    private ObjectInputStream inputStream;
+    
     // Constructor
     public Client() {
         // Create the GUI handler first
@@ -63,6 +70,15 @@ public class Client {
         }
     }
 
+    public void sendMessage() {
+    	// 
+    	owner.getChat();
+    	// STEPS:
+    	// 1. Get Chat ID
+    	// 2. 
+    	
+    }
+    
     public static void main(String[] args) {
         // Start the client on the Event Dispatch Thread
         // This is important for GUI applications
@@ -70,4 +86,6 @@ public class Client {
             new Client();
         });
     }
+    
+    
 }

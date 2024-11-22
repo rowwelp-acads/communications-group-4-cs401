@@ -1,5 +1,3 @@
-hello
-how are you
-im fine, how are you
-im good
-cool
+rowwelpon|2024-11-21T14:30:00|Hello, Bryan! How are you doing today?
+bryanmad|2024-11-21T14:32:00|Hi, Rowwel! I'm good. What about you?
+rowwelpon|2024-11-21T14:35:00|I'm doing well too. Let's plan our meeting for next week.
