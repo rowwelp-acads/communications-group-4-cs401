@@ -3,13 +3,38 @@ package main.java;
 import java.util.*;
 
 public class Chat {
+	private int uniqueID;
+	private static int count = 0;
+	
+	
+	
 	private List<UserAccount> participants;
-	private List<UserAccount> activeParticipants;
+	// private List<UserAccount> activeParticipants;
 	private ConversationHistory history;
+	private String name;
+	private UserAccount creator;
 
-	public Chat() {
+	public Chat(UserAccount owner) {
+		creator = owner;
 		history = new ConversationHistory();
+		uniqueID = count++;
 	}
+
+	// IF GUI BUTTON PRESSED
+	// ACTIONLISTENER CALLS SENDMESSAGE
+	public void sendMessage(String content, UserAccount sender) {
+		Message newMessage = new Message(content, sender);	
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	public void addParticipant(String username, Chat chat) {
 		// for (UserAccount participant : participants) {
@@ -17,17 +42,10 @@ public class Chat {
               //   System.out.println("User " + username + " is already a participant.");
                 // return;
            //  }
-	}
-
-
-	public void addParticipant(String username) {
+		
 		// Implement it here...
 		// Go through participant database
 		// if username == UserAcount.getUsername()
-		
-
-        }
-		
 		// Somehow call server's UserManagement to get the useraccount based on the userID
 		// Use a Message object to send UserAccount over the network? Must somehow find a way 
 		// to pass UserAccount to client or construct a new one based on a Message passed over the network.
@@ -42,9 +60,9 @@ public class Chat {
             System.out.println("User " + username + " does not exist.");
         }
 		*/
-		
-		
 	}
+
+		
 	public void removeParticipant(String username) {
 		// Implement it here...
 		
@@ -58,8 +76,8 @@ public class Chat {
 	    
 	    if (userToRemove != null) {
 	        participants.remove(userToRemove);
-	        activeParticipants.remove(userToRemove);
-	        
+
+	        // Broadcast Message that User has left a chat
 	        String systemMessageContent = username + " has left the chat.";
 	        Message systemMessage = new Message(systemMessageContent, null);
 	        messages.add(systemMessage);
@@ -70,10 +88,7 @@ public class Chat {
 	    }
 		
 	}
-	public void sendMessage(Message message) {
-		// Implement it here...
-		
-	}
+
 	
 	public List<Message> loadConversationHistory() {
 		// Implement it here...
@@ -119,3 +134,5 @@ public class Chat {
 	}
 
 }
+
+
