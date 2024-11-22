@@ -18,6 +18,7 @@ public class UserAccount {
 		this.username = username;
         this.email = email;
         this.password = password;
+        chatRoom = new Chatroom(this);
 	}
 	
   // Getters and Setters.
@@ -62,8 +63,14 @@ public class UserAccount {
       System.out.println("User " + username + " has logged out.");
   }
   
-  public void updateChatList(Chat chat) {
-	  
+  public void addChat(Chat chat) {
+	 // Steps
+	 // 1. chatRoom.add(chat);
+  }
+  
+  public void removeChat() {
+	 // Steps
+	 // 1. chatRoom.remove(chat);
   }
 
   @Override
