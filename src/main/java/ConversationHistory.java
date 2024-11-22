@@ -5,7 +5,7 @@ import java.util.List;
 
 public class ConversationHistory {
 	private String userId;
-	private List<Chat> chats;
+	
 	
 	public ConversationHistory(String userId) {
 		this.userId = userId;

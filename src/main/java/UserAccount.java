@@ -9,6 +9,9 @@ public class UserAccount {
 	private String email;
 	private String password;
 	
+	// will hold this specific user's list of chats
+	private Chatroom chatRoom;
+	
 	// Constructor.
 	public UserAccount(String userId, String username, String email, String password) {
 		this.userId = username + Integer.toString(num + 1);
@@ -57,6 +60,10 @@ public class UserAccount {
 
   public void logout() {
       System.out.println("User " + username + " has logged out.");
+  }
+  
+  public void updateChatList(Chat chat) {
+	  
   }
 
   @Override
