@@ -1,6 +1,7 @@
 package main.java;
 
 import java.util.Date;
+import java.util.List;
 import java.io.Serializable;
 
 public class Message implements Serializable {
@@ -13,7 +14,7 @@ public class Message implements Serializable {
 	private String content;
 	private Date timestamp;
 	private MESSAGETYPE type;
-	private UserAccount[] recipients;
+	private List<UserAccount> participants;
 	private int chatID;
 	
 	// Content for Log In Messages
@@ -34,12 +35,10 @@ public class Message implements Serializable {
 	// CONSTRUCTORS
 	// Regular Chat Messages with recipients
 	// added by Johnny
-	public Message(String content, UserAccount sender, UserAccount[] recipients) {
-		this.sender = sender;
+	// mostly for debugging for now
+	public Message(String content) { // chatID here
 		this.content = content;
 		this.timestamp = new Date();
-		this.recipients = recipients;
-		this.type = MESSAGETYPE.MESSAGETOSEND;
 	}
 	
 	// CONSTRUCTORS
@@ -60,8 +59,8 @@ public class Message implements Serializable {
 		return content;
 	}
 	
-	public UserAccount[] getRecipients() {
-		return recipients;
+	public List<UserAccount> getParticipants() {
+		return participants;
 	}
 	
 	public Date getTimestamp() {
@@ -78,6 +77,10 @@ public class Message implements Serializable {
 	
 	public String getPassword() {
 		return password;
+	}
+	
+	public int getChatID() {
+		return chatID;
 	}
 	
 	public boolean isChatMessage() {

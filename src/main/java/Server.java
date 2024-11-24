@@ -39,17 +39,23 @@ public class Server {
     }
     
     /*
-     * method to send message between ClientHandlers
+     * method to broadcast messages
      * called in ClientHandler
      */
-    public static void sendMessageToClient(Message message) throws IOException {
+    public static void broadcastMessageToClient(Message message) throws IOException {
     	synchronized (clients) {
-    		UserAccount[] recipientsArray = message.getRecipients();
-    		for (int i = 0; i < recipientsArray.length; i++) {
-    			ClientHandler recipientHandler = clients.get(recipientsArray[i].getID());
-    			ObjectOutputStream out = recipientHandler.getOut();
-    			out.writeObject(message);
-    			out.flush();
+    		for (Map.Entry<String, ClientHandler> entry : clients.entrySet()) {
+    			ClientHandler clientInMap = entry.getValue();
+    			ObjectOutputStream out = clientInMap.getOut();
+    			//System.out.println(message.getContent()); // test check content
+    			try {
+        			out.writeObject(message);
+        			out.flush();
+    			}
+    			catch (Exception ex) {
+    				System.out.println("Error sending msg from Server to Client");
+    				ex.printStackTrace();
+    			}
     		}
     	}
     	

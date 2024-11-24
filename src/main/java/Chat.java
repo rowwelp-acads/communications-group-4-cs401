@@ -12,13 +12,11 @@ public class Chat {
     private String name;
     private UserAccount creator;
     private List<Message> messages;
-    private ObjectOutputStream serverOutputStream; 
 
-	public Chat(UserAccount owner, ObjectOutputStream outputStream) {
+	public Chat(UserAccount owner) {
 		creator = owner;
 		history = new ConversationHistory();
 		uniqueID = count++;
-		serverOutputStream = outputStream;
 	}
 
 	// IF GUI BUTTON PRESSED
@@ -26,6 +24,7 @@ public class Chat {
 	// Content is taken from the GUI
 	// UserAccount is also taken from the GUI
 	// When you input a message in the text input field, it should contain values for content and UserAccount
+	/*
 	public void sendMessage(String content, UserAccount sender) {
 		Message newMessage = new Message(content, sender, uniqueID);
 		
@@ -36,12 +35,25 @@ public class Chat {
             System.err.println("Error sending message to server: " + e.getMessage());
         }
 	}
-
+	 */
 	
+	// this method is to add the Message to chat history to be displayed in ChatRoom
+	// note current design is sending messages between all clients (even back to sender)
+	public void addMessageToHistory(Message msgObj) {
+		// TODO: add functionality
+	}
 	
+	public UserAccount getOwner() {
+		return creator;
+	}
 	
+	public int getID() {
+		return uniqueID;
+	}
 	
-	
+	public List<UserAccount> getParticipants(){
+		return participants;
+	}
 	
 	
 	
@@ -72,7 +84,6 @@ public class Chat {
         }
 		*/
 	}
-
 		
 	public void removeParticipant(String username) {
 		// Implement it here...

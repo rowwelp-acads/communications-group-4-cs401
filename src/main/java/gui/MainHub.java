@@ -2,9 +2,15 @@ package main.java.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
+import main.java.ChatList;
+import main.java.Message;
 
 
 /*
@@ -27,6 +33,11 @@ public class MainHub {
 	JButton logoutButton = new JButton("Logout");
 	JPanel buttonContainer = new JPanel();
 	JPanel chatsContainer = new JPanel();
+	ObjectInputStream msgIn;
+	ObjectOutputStream msgOut;
+	ChatList userChatList;
+	String selectedChatRoom = "";
+	
 	
 	String chatExample[] = {"2nd Floor group chat",
 							"Engineering department group chat",
@@ -35,8 +46,14 @@ public class MainHub {
 							"Manager private chat"};
 	
 	// Chatroom chatroom  
+	
+	// default constructor
+	public MainHub() {	
+	}
 			
-	public MainHub() {
+	public MainHub(ObjectInputStream in, ObjectOutputStream out) {
+		msgIn = in;
+		msgOut = out;
 	}
 	
 	public void openMainHub() {
@@ -74,6 +91,34 @@ public class MainHub {
 		mainFrame.setAlwaysOnTop(true);
 		mainFrame.setVisible(true);
 		mainFrame.setLocationRelativeTo(null);
+		
+		
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				while (true) {
+					try {
+						Message msgObject = (Message) msgIn.readObject();
+						// check if the chatID matches with user's chat list. Update that chat history messages if matched.
+						SwingUtilities.invokeLater(() -> {
+							System.out.println(msgObject.getContent());
+							/*
+							for (int i = 0; i < userChatList.getLength(); i++) {
+								if (userChatList.getChat(i).getID() == msgObject.getChatID()) {
+									userChatList.getChat(i).addMessageToHistory(msgObject);
+								}
+							} */
+						});
+					}
+					catch (Exception ex) {
+						System.out.println("Error receiving msg from Server in MainHub. at line 98");
+						ex.printStackTrace();
+						break;
+					}
+				}
+			}
+		}).start();
 	}
 	
 	private class EventListener implements ActionListener {
@@ -86,7 +131,9 @@ public class MainHub {
 	            }
 			else if (event.getActionCommand().equals("Open Chat")) {
 				// open chat method
-				JOptionPane.showMessageDialog(mainFrame, "Placeholder. Open chat method will be call here", "Info", JOptionPane.INFORMATION_MESSAGE);
+				//JOptionPane.showMessageDialog(mainFrame, "Placeholder. Open chat method will be call here", "Info", JOptionPane.INFORMATION_MESSAGE);
+				ChatRoom chatRoom = new ChatRoom(msgIn, msgOut);
+				mainFrame.setVisible(false);
 			}
 			else if (event.getActionCommand().equals("Delete Chat")) {
 				// delete chat method
@@ -114,10 +161,17 @@ public class MainHub {
 		
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
-			// TODO work with EventListener buttons
+	        if (!e.getValueIsAdjusting()) { // Avoid multiple events for the same selection
+	            JList source = (JList) e.getSource();
+	            selectedChatRoom = (String) source.getSelectedValue();
+	        }
 			
 		}
 		
 	}
-	
+	/*
+	public static void main(String[] args) {
+		MainHub mainhub = new MainHub();
+	}
+	*/
 }

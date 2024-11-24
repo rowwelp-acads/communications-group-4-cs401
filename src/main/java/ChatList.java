@@ -4,14 +4,14 @@ import java.util.List;
 
 // This class is to hold a list of Chats
 // Meant to be displayed through the JList located in Main Hub
-public class Chatroom {
+public class ChatList {
 	private int uniqueID;
 	private static int count;
 	private List<Chat> listOfChats; 
 	private UserAccount owner;
 	
 	
-	public Chatroom(UserAccount username) {
+	public ChatList(UserAccount username) {
 		owner = username;
 		uniqueID = count++;
 	}
@@ -27,6 +27,18 @@ public class Chatroom {
 	
 	public void removeChat() {
 		
+	}
+	
+	public boolean verifyChat(int chatID) {
+		return false;
+	}
+	
+	public int getLength() {
+		return listOfChats.size();
+	}
+	
+	public Chat getChat(int index) {
+		return listOfChats.get(index);
 	}
 }
 

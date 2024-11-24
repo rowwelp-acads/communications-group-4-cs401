@@ -6,6 +6,34 @@ import javax.swing.*;  // For creating GUI elements
 
 import main.java.gui.LogInFrame;
 
+/* 
+ * Server's is expecting:
+ * A user will send the message as a Message Object through the ChatRoom GUI, via the send message button. (ObjectOutputStream is passes along into ChatRoom)
+ * Server will receive Message Object and broadcast it to all Clients (including back to sender for now) 
+ * ((TODO) Still figuring out how to differentiate which clients is which UserAcount to send message to specifically) 
+ * 
+ * Once logged in and MainHub is started, MainHub will spawn background thread to continuously checking for incoming Messages from Server 
+ * 
+ * If a Message is received, check if the Message's chatID matches with user's list of chats
+ * If matching then update the Message's content to that Chat's conversation history
+ * 
+ * ChatRoom GUI should be updating the conversation history in the background continuously to display new messages maybe?
+ * Only opened ChatRoom GUI is updating
+ * 
+ * But MainHub will continuously update all chat's conversationHistory still
+ * 
+ * 
+ * Changes: change the ChatRoom class in main.java to ChatList instead to more correctly reflect its function. (It has duplicate name with ChatRoom GUI too)
+ * Setup LogInFrame class to connect to Server class for logging in
+ * 
+ * 
+ * Current actual function: chatRoom can send a message to server and MainHub will receive it but only display it to console until we figure out how to implement displaying chat history
+ * To test: run the Server and Client -> log-in -> select a chat in the chat list -> Open Chat -> type in text field -> send message -> message will be displayed in the Client's console
+ * 
+ * Design question: 
+ * I'm assuming that Chat class is used for holding information of a chat (i.e. chat id, chat history)?
+ * 
+ */
 public class Client {
     // Socket for connecting to the server
     private Socket socket;
@@ -17,13 +45,14 @@ public class Client {
     private GUIHandler guiHandler;
     
     // Account Holder
-    private UserAccount owner;
+    private UserAccount owner = new UserAccount();
     
 /////////////////////// /////////////////////// /////////////////////// /////////////////////// /////////////////////// /////////////////////// 
 /////////////////////// /////////////////////// /////////////////////// /////////////////////// /////////////////////// /////////////////////// 
 /////////////////////// /////////////////////// /////////////////////// /////////////////////// /////////////////////// /////////////////////// 
     // Add server IP as a constant
-    private static final String SERVER_IP = "134.154.45.100"; /////////////////////// Change this to your server's IP
+    //private static final String SERVER_IP = "134.154.45.100"; /////////////////////// Change this to your server's IP
+    private static final String SERVER_IP = "127.0.0.1";
     // Rowell IS dedicated SERVER 
 /////////////////////// /////////////////////// /////////////////////// /////////////////////// /////////////////////// /////////////////////// 
 /////////////////////// /////////////////////// /////////////////////// /////////////////////// /////////////////////// /////////////////////// 
@@ -33,24 +62,27 @@ public class Client {
     private static final int PORT = 8888;
 
     
-    private ObjectOutputStream outputStream;
-    private ObjectInputStream inputStream;
+	private InputStream inputStream;
+	private ObjectInputStream objectInputStream;
+	private OutputStream outputStream;
+	private ObjectOutputStream objectOutputStream;
     
     // Constructor
     public Client() {
         // Create the GUI handler first
         this.guiHandler = new GUIHandler(this);
         
-        // Set up the GUI (login screen)
-        setupGUI();
-        
         // Connect to the server
         connectToServer();
+        //New Thread();
+        // Set up the GUI (login screen)
+        setupGUI();
+       
     }
     // Sets up the initial GUI
     private void setupGUI() {
         // Tell the GUI handler to create the login interface
-    	guiHandler.setupLoginInterface();
+    	guiHandler.setupLoginInterface(objectInputStream, objectOutputStream);
     }
 
     // Connects to the server
@@ -61,22 +93,19 @@ public class Client {
             // Create a socket connection to the server
             socket = new Socket(SERVER_IP, 8888);
             
+            // Setup InputStream and OutputStream + ObjectStreams
+    		outputStream = socket.getOutputStream();
+    		objectOutputStream = new ObjectOutputStream(outputStream);
+    		inputStream = socket.getInputStream();
+    		objectInputStream = new ObjectInputStream(inputStream);
+    		
             // Mark that we're connected
             isConnected = true;
             System.out.println("Connected to server!");
         } catch (IOException e) {
             // If connection fails, print the error
-            e.printStackTrace();
+            System.out.println("Connection refused. Server not running.");
         }
-    }
-
-    public void sendMessage() {
-    	// 
-    	owner.getChat();
-    	// STEPS:
-    	// 1. Get Chat ID
-    	// 2. 
-    	
     }
     
     public static void main(String[] args) {

@@ -62,29 +62,35 @@ public class ClientHandler extends Thread {
 						// string result of verification
 						String verificationResult = Server.verify(objectIn);
 						// message to be return to sender
-						Message returnVerification = new Message(verificationResult, objectIn.getSender(), objectIn.getRecipients());
+						Message returnVerification = new Message(verificationResult);
 						returnVerification.setMessageType(MESSAGETYPE.LOGINTOSEND);
+						//returnVerification.setMessageType(MESSAGETYPE.LOGINTOSEND);
 						// return message
-						objectOutputStream.writeObject(returnVerification);
-						objectOutputStream.flush();					
+						//objectOutputStream.writeObject(returnVerification);
+						System.out.println("log in success");
+						objectOutputStream.writeObject(new Message("true", null));
+						objectOutputStream.flush();	
 					}
 					// send message request
 					else if (objectIn.getType() == MESSAGETYPE.MESSAGETOSEND) {
 						// hand message object back to server in order to execute sending to recipient's ClientHandler
-						Server.sendMessageToClient(objectIn);
+						//System.out.println(objectIn.getContent());
+						Server.broadcastMessageToClient(objectIn);
+						
 					}
 					// disconnect request
 					else if (objectIn.getType() == MESSAGETYPE.DISCONNECT) {
 						// send disconnect message back to client
-						Message disconnect = new Message("Disconnecting", objectIn.getSender(), objectIn.getRecipients());
-						disconnect.setMessageType(MESSAGETYPE.DISCONNECT);
-						objectOutputStream.writeObject(disconnect);
+						//Message disconnect = new Message("Disconnecting", objectIn.getSender(), objectIn.getRecipients());
+						//disconnect.setMessageType(MESSAGETYPE.DISCONNECT);
+						//objectOutputStream.writeObject(disconnect);
 						
-						objectOutputStream.flush();
+						//objectOutputStream.flush();
 						break;
 					}
 				} catch (Exception e) {
-					e.printStackTrace();
+					System.out.println("Server error: ClientHandler message handling");
+					break;
 				}
 			}
 

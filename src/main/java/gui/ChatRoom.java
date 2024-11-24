@@ -2,11 +2,21 @@ package main.java.gui;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 import javax.swing.*;
 
+import main.java.Chat;
+import main.java.MESSAGETYPE;
+import main.java.Message;
+
 public class ChatRoom {
 	JFrame chatroomFrame = new JFrame("Chatroom");
+	
+	// hold information of this chat room ? is this needed?
+	Chat thisChatInfo;
 	
 	// A
 	JPanel chatPanel = new JPanel();
@@ -20,6 +30,9 @@ public class ChatRoom {
 	JButton userListButton = new JButton("Manage Chat...");
 	JButton sendMessageButton = new JButton("Send");
 	
+	ObjectInputStream msgIn;
+	ObjectOutputStream msgOut;
+	
 	String messagesExample[] = {"User 1: Hello!",
 			"User 2: Hello!",
 			"User 1: How are you?",
@@ -30,7 +43,11 @@ public class ChatRoom {
 			"User 1: Yikes!"
 	};
 	
-	public ChatRoom() {
+	public ChatRoom(ObjectInputStream in, ObjectOutputStream out) {
+		msgIn = in;
+		msgOut = out;
+		//thisChatInfo = chatInfo;
+		
 		JList<String> messageList = new JList<>(messagesExample);
 		// a
 		JScrollPane messageListScrollPane = new JScrollPane(messageList);
@@ -62,6 +79,23 @@ public class ChatRoom {
 		
 		optionsPanel.add(userListButton);
 		
+		// send message to server
+		// get the text field into a message object then send. Should not close msgOut.
+		sendMessageButton.addActionListener(e -> {
+			if (messageField.getText() != null) {
+				Message msg = new Message(messageField.getText());
+				msg.setMessageType(MESSAGETYPE.MESSAGETOSEND);
+				try {
+					msgOut.writeObject(msg);
+					msgOut.flush();
+				} catch (IOException e1) {
+					System.out.println("ChatRoom send message error starting at line 82");
+					e1.printStackTrace();
+				}
+			}
+
+		});
+		
 		userListButton.addActionListener(e -> {
 			/*
 			JDialog dialog = new JDialog(chatroomFrame, "UserListButton clicked", true);
@@ -90,8 +124,15 @@ public class ChatRoom {
 		chatroomFrame.setLocationRelativeTo(null);
 		chatroomFrame.setVisible(true);
 		
+		
 	}
 	
+	// update the chatRoom GUI in the background every (1 second?) for new incoming messages. 
+	// Johnny: I'm assuming we are using ConversationHistory to show previous messages in the chat room
+	public void updateChatRoom(Message inMessageObject) {
+		// TODO: add functionality
+	}
+	/*
 	public void openChatroom() {
 		new ChatRoom();
 	}
@@ -101,5 +142,5 @@ public class ChatRoom {
 		ChatRoom chatroom = new ChatRoom();
 		//chatroom.openChatroom();
 	}
-	
+	*/
 }

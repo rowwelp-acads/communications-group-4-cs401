@@ -4,15 +4,19 @@ import java.io.Serializable;
 
 public class UserAccount implements Serializable {
 	private static final long serialVersionUID = 1L;
+	private static int count = 0;
 	private String id;
 
 	public UserAccount() {
-
+		id = String.valueOf(count++);
 	}
 
 	public String getID() {
 		return id;
 	}
+	private ChatList chatList;
+	
+	/*
 
 // TODO: Write JUnit tests! @BryanMadrigal
 // TODO: Comment all class methods!
@@ -100,4 +104,5 @@ public class UserAccount implements Serializable {
 			return "UserAccount [userId=" + userId + ",username=" + username + ",email=" + email + "]";
 		}
 	}
+	*/
 }

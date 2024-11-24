@@ -5,6 +5,8 @@ import javax.swing.*;  // For creating GUI elements
 import main.java.gui.LogInFrame;
 
 import java.awt.*;    // For additional GUI components
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 public class GUIHandler {
     private JFrame loginFrame;    // Window for login
@@ -20,13 +22,14 @@ public class GUIHandler {
     }
 
     // Creates and shows the login interface
-    public void setupLoginInterface() {
+    // passes ObjectStreams along for sending messages
+    public void setupLoginInterface(ObjectInputStream in, ObjectOutputStream out) {
         /*
         IMPLEMENT:
         1. Create a window (JFrame) for login
         */
     	
-    	LogInFrame logIn = new LogInFrame();
+    	LogInFrame logIn = new LogInFrame(in, out);
     	//logIn.openLoginWindow();
     	
     	

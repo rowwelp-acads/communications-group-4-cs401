@@ -2,9 +2,15 @@ package main.java.gui;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+import main.java.MESSAGETYPE;
+import main.java.Message;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 public class LogInFrame {
 
@@ -13,8 +19,18 @@ public class LogInFrame {
     private JPasswordField passwordField;
     private JButton loginButton;
     private JButton cancelButton;
-
+    
+    private ObjectInputStream msgIn;
+    private ObjectOutputStream msgOut;
+    private MainHub mainHub;
+    
     public LogInFrame() {
+    	openLoginWindow();
+    }
+    
+    public LogInFrame(ObjectInputStream in, ObjectOutputStream out) {
+    	msgIn = in;
+    	msgOut = out;
     	openLoginWindow();
     }
     
@@ -94,8 +110,29 @@ public class LogInFrame {
                 String password = new String(passwordField.getPassword());
                 // Insert login logic here
                 JOptionPane.showMessageDialog(frame, "Login clicked: [" + username + "] Entered the password [" + password + "]");
-                MainHub newHub = new MainHub();
-                frame.dispose();
+                
+                // Server connection for log-in
+                // send a Msg obj then wait for a return Msg obj from server
+                // check if returned Msg's username is "true" (placeholder for verification result)
+                try {
+                	msgOut.writeObject(new Message(username, password)); // sending message to server
+                	msgOut.flush();
+                	
+                	Message serverRespond = (Message) msgIn.readObject(); // return message from server
+                	
+                	if (serverRespond.getType() == MESSAGETYPE.LOGINTOSEND && serverRespond.getUsername().equals("true")) { // check return message
+						mainHub = new MainHub(msgIn, msgOut);
+						mainHub.openMainHub();
+						//frame.setVisible(false);
+						frame.dispose();
+                	}
+                	else {
+                		JOptionPane.showMessageDialog(frame, "Error: Log-in failed. Please try again.", "Error", JOptionPane.ERROR_MESSAGE); // if return message is "false"
+                	}
+                }
+                catch (Exception ex) {
+                	System.out.println("Sending/receiving login msg error at line 108 LogInFrame, server not connected.");
+                }
             }
         });
 
