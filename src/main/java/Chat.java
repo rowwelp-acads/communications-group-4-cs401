@@ -55,7 +55,9 @@ public class Chat {
 		return participants;
 	}
 	
-	
+	public int setID(int ID) {
+		return this.uniqueID; 
+	}
 	
 	
 	
