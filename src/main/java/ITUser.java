@@ -12,11 +12,17 @@ public class ITUser extends UserAccount {
     
     // Serves as the handle to the Conversation HistoryLogs
     //private ConversationHistory convoLogs;
+	
+	// Constructor
+    public ITUser(String username, String password) {
+        super(username,password);
+        this.accessLevel = 2;
+    }
     
 	// Constructor
-    public ITUser(String userId, String username, String email, String password, int accessLevel) {
-        super(userId, username, email, password);
-        this.accessLevel = accessLevel;
+    public ITUser(String username, String password, String id) {
+        super(username,password,id);
+        this.accessLevel = 2;
     }
     
     // Getters and Setters:
@@ -91,13 +97,13 @@ public class ITUser extends UserAccount {
 //        return null;
 //    }
     
-    public UserAccount createUserAccount(String accountType, String userId, String username, String email, String password) {
+    public UserAccount createUserAccount(String accountType, String username, String password) {
         // TODO: brainstorm modification to how we want the user to assighn profile attributes
     	if (accountType.equals("Regular")) {
-        	return new RegularUser(userId, username, email, password, 1);
+        	return new RegularUser(username, password);
         }
         else if (accountType.equals("IT")) {
-            return new ITUser(userId, username, email, password, 2);
+            return new ITUser(username, password);
         }
         return null;
     }
