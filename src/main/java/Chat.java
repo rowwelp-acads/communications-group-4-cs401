@@ -11,14 +11,15 @@ public class Chat {
     private ConversationHistory history;
     private String name;
     private UserAccount creator;
-    private List<Message> messages;
+    private List<Message> messages;    // <--- Do we need this line?
+
 
 	public Chat(UserAccount owner) {
 		creator = owner;
 		history = new ConversationHistory();
 		uniqueID = count++;
 	}
-
+	
 	// IF GUI BUTTON PRESSED
 	// ACTIONLISTENER CALLS SENDMESSAGE
 	// Content is taken from the GUI
