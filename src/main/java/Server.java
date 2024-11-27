@@ -13,14 +13,24 @@ public class Server {
     // Collections.synchronizedMap makes it thread-safe (prevents errors when multiple clients connect/disconnect)
     private static Map<String, ClientHandler> clients = Collections.synchronizedMap(new HashMap<>());
     
+    
+    
     private static UserManagement database = new UserManagement();
     private static ConversationLog serverLog = new ConversationLog("00");
+    
+    // Will hold all UserAccount's designated chatList 
+    // KA
+    private static List<ChatList> chatList = new ArrayList<>();
+    private static ChatListManager chatListManager;
     
     public static void main(String[] args) {
         try {
             // Create a ServerSocket that listens for client connections on the specified port
             ServerSocket serverSocket = new ServerSocket(PORT);
             System.out.println("Server is running on port " + PORT);
+            
+            // NOVEMBER 25 KA
+            chatListManager = new ChatListManager();
             
             // Keep the server running forever
             while (true) {
@@ -96,4 +106,21 @@ public class Server {
             System.out.println("Client removed. Total clients: " + clients.size());
         }
     }
+    
+    
+    // Method to get the User's Chat List
+    public static List<Integer> getUserChatList(String userID) {
+        return chatListManager.getUserChatList(userID);
+    }
+    
+    // Method to Remove a Chat from the List
+    public static void removeChatFromList(String userID, int chatID) {
+        chatListManager.removeChatFromList(userID, chatID);
+    }
+
+    // Method to Add a Chat to the List
+    public static void addChatToList(String userID, int chatID) {
+        chatListManager.addChatToList(userID, chatID);
+    }
+    
 }
