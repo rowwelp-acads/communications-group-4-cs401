@@ -6,15 +6,27 @@ public class UserAccount implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private static int count = 0;
 	private String id;
+	
+	// KAI CHANGES : NOVEMBER 25
+	private ChatList chatList; 
 
+	// CONSTRUCTOR
 	public UserAccount() {
 		id = String.valueOf(count++);
+		chatList = new ChatList(this); // KA
 	}
 
 	public String getID() {
 		return id;
 	}
-	private ChatList chatList;
+	
+	public ChatList getChatList() { // KA
+        return chatList;
+    }
+
+    public void setChatList(ChatList chatList) { //KA
+        this.chatList = chatList;
+    }
 	
 	/*
 
