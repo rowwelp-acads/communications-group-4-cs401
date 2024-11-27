@@ -11,7 +11,6 @@ public class Chat {
     private ConversationHistory history;
     private String name;
     private UserAccount creator;
-    private List<Message> messages;    // <--- Do we need this line?
 
 
 	public Chat(UserAccount owner) {
