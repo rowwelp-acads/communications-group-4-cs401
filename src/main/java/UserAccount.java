@@ -1,20 +1,59 @@
 package main.java;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.Serializable;
+import java.util.Scanner;
 
-public class UserAccount implements Serializable {
+public class UserAccount implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private static int count = 0;
-	private String id;
+	private String id = "";
+	private ChatList userChatList;
+	private ConversationLog convoLog;
 
+	public UserAccount(String name) {
+		id = name;
+	}
+	
 	public UserAccount() {
-		id = String.valueOf(count++);
+		
+	}
+	
+	public void openUserAccount(String name) {
+		id = name;
+		// file of user name hold list of chat, grab it and stored in var chatList
+		try {
+			File userFile = new File(id);
+			Scanner scanner = new Scanner(userFile);
+			while (scanner.hasNextLine()) {
+				userChatList.addChat(scanner.nextLine());
+			}
+			
+			// with userChatList, grab their conversationHistory from file, each chatRoom has a separate file
+			// TODO:
+		} 
+		catch (FileNotFoundException e) {
+			System.out.println("New user, creating new user file");
+		}
+	}
+	
+	public void addMessage(Message msg) {
+		// add to conversationHistory through accessing conversationLog
 	}
 
 	public String getID() {
 		return id;
 	}
-	private ChatList chatList;
+	
+	public ChatList getChatList() {
+		return userChatList;
+	}
+	
+	public ConversationHistory getHistory(String name) {
+		return convoLog.getHistory(name);
+	}
+
 	
 	/*
 
@@ -104,5 +143,5 @@ public class UserAccount implements Serializable {
 			return "UserAccount [userId=" + userId + ",username=" + username + ",email=" + email + "]";
 		}
 	}
-	*/
+*/	
 }

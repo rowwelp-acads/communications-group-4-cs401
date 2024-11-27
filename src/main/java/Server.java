@@ -14,6 +14,7 @@ public class Server {
     private static Map<String, ClientHandler> clients = Collections.synchronizedMap(new HashMap<>());
     
     private static UserManagement database = new UserManagement();
+    private static ConversationLog serverLog = new ConversationLog("00");
     
     public static void main(String[] args) {
         try {
@@ -44,6 +45,9 @@ public class Server {
      */
     public static void broadcastMessageToClient(Message message) throws IOException {
     	synchronized (clients) {
+    		// check for recipients (matching name with String key)
+    		// broadcast msg to them only
+    		// add msg to their UserAccount chat History
     		for (Map.Entry<String, ClientHandler> entry : clients.entrySet()) {
     			ClientHandler clientInMap = entry.getValue();
     			ObjectOutputStream out = clientInMap.getOut();
