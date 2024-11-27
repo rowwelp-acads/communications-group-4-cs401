@@ -15,14 +15,10 @@ public class ConversationHistory implements Serializable {
 	public String getName() {
 		return chatName;
 	}
-
 	
-	/*
-	 * not sure if this should be here, delete if not
-	 */
-//	public List<Message> getLatestMessages(String chatId) {
-//		//update method if it does not match with chat loadconvo command
-//		return chats.get(chatId).loadConversationalHistory();
-//	}
-//	
+	public void addMessage(Message message) {
+		
+	}
+	
+	
 }
