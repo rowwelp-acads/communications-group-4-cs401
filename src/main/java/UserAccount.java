@@ -15,21 +15,21 @@ public class UserAccount implements Serializable {
         this.id = String.valueOf(count++);
         this.username = username;
         this.password = password;
-        this.chatList = new ChatList(this); // Ensure ChatList has this constructor
+        //this.chatList = new ChatList(this); // Ensure ChatList has this constructor
     }
 
     public UserAccount(String username, String password, String id) {
         this.id = id;
         this.username = username;
         this.password = password;
-        this.chatList = new ChatList(this); // Ensure ChatList has this constructor
+        //this.chatList = new ChatList(this); // Ensure ChatList has this constructor
     }
 
     // Default Constructor
     public UserAccount() {}
 
     // Getter and Setter methods
-    public String getUserId() {
+    public String getID() {
         return id;
     }
 
@@ -74,6 +74,18 @@ public class UserAccount implements Serializable {
 
     public void logout() {
         System.out.println("User " + username + " has logged out.");
+    }
+    
+    public static void setCount(int newCount) {
+        count = newCount;
+    }
+    
+    public static int getCount() {
+        return count;
+    }
+    
+    public void setChatList() {
+        this.chatList = new ChatList(this);
     }
 }
 

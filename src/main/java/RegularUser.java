@@ -10,7 +10,7 @@ public class RegularUser extends UserAccount {
         // Calls the UserAccount Constructor
         super(username, password, id);
         this.accessLevel = 1; // Default access level
-    }
+    } 
 
     // Constructor
     public RegularUser(String username, String password) {

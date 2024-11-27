@@ -1,31 +1,28 @@
 package main.java;
 
 import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.List;
 import java.util.Set;
 
-//TODO: Write JUnit tests! @BryanMadrigal
 public class ITUser extends UserAccount {
-    // Attributes
-	private int accessLevel;
-	private UserManagement userManagement;
+    private int accessLevel;
+    private UserManagement userManagement;
     
-    // Serves as the handle to the Conversation HistoryLogs
-    //private ConversationHistory convoLogs;
-	
-	// Constructor
-    public ITUser(String username, String password) {
-        super(username,password);
+    // Constructors
+    public ITUser(String username, String password, UserManagement userManagement) {
+        super(username, password);
         this.accessLevel = 2;
+        this.userManagement = userManagement;
     }
     
-	// Constructor
-    public ITUser(String username, String password, String id) {
-        super(username,password,id);
+    public ITUser(String username, String password, String id, UserManagement userManagement) {
+        super(username, password, id);
         this.accessLevel = 2;
+        this.userManagement = userManagement;
     }
+
     
-    // Getters and Setters:
+    // Getters and Setters
     public int getAccessLevel() {
         return accessLevel;
     }
@@ -34,78 +31,34 @@ public class ITUser extends UserAccount {
         this.accessLevel = accessLevel;
     }
     
-    // Methods
-    public void manageUsers() {
-        UserManagement key = this.userManagement;
-        Scanner scanner = new Scanner(System.in);
-
-        while (true) {
-            System.out.println("\nUser Management Menu:");
-            System.out.println("1. Get All Users");
-            System.out.println("2. Get Specific User");
-            System.out.println("3. Remove User");
-            System.out.println("4. Exit");
-            System.out.print("Choose an option (1-4): ");
-
-
-            String choice = scanner.nextLine().trim();
-
-            switch (choice) {
-                case "1":
-                    Set<String> allUsers = key.getAllUsernames();
-                    System.out.println("\nAll users in the system:");
-                    for (String user : allUsers) {
-                        System.out.println("- " + user);
-                    }
-                    break;
-
-                case "2":
-                    System.out.print("Enter username to find: ");
-                    String userToFind = scanner.nextLine().trim();
-                    if (key.userExists(userToFind)) {
-                        System.out.println("User found: " + userToFind);
-                    } else {
-                        System.out.println("User not found: " + userToFind);
-                    }
-                    break;
-
-                case "3":
-                    System.out.print("Enter username to remove: ");
-                    String userToRemove = scanner.nextLine().trim();
-                    if (key.removeUser(userToRemove)) {
-                        System.out.println("Successfully removed user: " + userToRemove);
-                    } else {
-                        System.out.println("Failed to remove user: " + userToRemove);
-                    }
-                    break;
-
-                case "4":
-                    System.out.println("Exiting user management...");
-                    return;
-
-                default:
-                    System.out.println("Invalid option. Please choose 1-4.");
-            }
-        }
+    // User Management Methods
+    public UserAccount getUser(String username) {
+        return userManagement.getUserAccount(username);
     }
     
-    
-    //TODO: The class below needs Conversation History done But this should use the handle above to 
-    // get to conversation history and allow us to get the conversation history we want.
-//    public List<ConversationHistory> viewAllConversationHistories() {
-//    
-//        return null;
-//    }
-    
-    public UserAccount createUserAccount(String accountType, String username, String password) {
-        // TODO: brainstorm modification to how we want the user to assighn profile attributes
-    	if (accountType.equals("Regular")) {
-        	return new RegularUser(username, password);
+    public List<UserAccount> getAllUsers() {
+        Set<String> usernames = userManagement.getAllUsernames();
+        List<UserAccount> userList = new ArrayList<>();
+        
+        for(String username : usernames) {
+            UserAccount user = userManagement.getUserAccount(username);
+            if(user != null) {
+                userList.add(user);
+            }
         }
-        else if (accountType.equals("IT")) {
-            return new ITUser(username, password);
+        
+        return userList;
+    }
+    
+    public boolean removeUser(String username) {
+        return userManagement.removeUser(username);
+    }
+    
+    public boolean newUser(String accountType, String username, String password) {
+        if (userManagement.userExists(username)) {
+            return false;
         }
-        return null;
+        return userManagement.addUser(username, password);
     }
     
     @Override
@@ -113,3 +66,10 @@ public class ITUser extends UserAccount {
         return super.toString() + " [accessLevel=" + accessLevel + "]";
     }
 }
+
+//TODO: The class below needs Conversation History done But this should use the handle above to 
+// get to conversation history and allow us to get the conversation history we want.
+//public List<ConversationHistory> viewAllConversationHistories() {
+//
+//    return null;
+//}
