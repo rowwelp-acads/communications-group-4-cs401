@@ -29,7 +29,7 @@ public class UserAccount implements Serializable{
 	}
 	
 	// CONSTRUCTOR
-	public UserAccount(String userId, String username, String email, String password) {
+	public UserAccount(String username, String password) {
 		id = String.valueOf(count++);
 		this.username = username;
 		this.password = password;
