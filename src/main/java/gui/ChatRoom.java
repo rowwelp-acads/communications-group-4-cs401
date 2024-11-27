@@ -9,8 +9,10 @@ import java.io.ObjectOutputStream;
 import javax.swing.*;
 
 import main.java.Chat;
+import main.java.ConversationHistory;
 import main.java.MESSAGETYPE;
 import main.java.Message;
+import main.java.UserAccount;
 
 public class ChatRoom {
 	JFrame chatroomFrame = new JFrame("Chatroom");
@@ -33,6 +35,9 @@ public class ChatRoom {
 	ObjectInputStream msgIn;
 	ObjectOutputStream msgOut;
 	
+	UserAccount user;
+	ConversationHistory convoHistory;
+	
 	String messagesExample[] = {"User 1: Hello!",
 			"User 2: Hello!",
 			"User 1: How are you?",
@@ -43,12 +48,15 @@ public class ChatRoom {
 			"User 1: Yikes!"
 	};
 	
-	public ChatRoom(ObjectInputStream in, ObjectOutputStream out) {
+	public ChatRoom(ObjectInputStream in, ObjectOutputStream out, UserAccount user) {
+		this.user = user;
 		msgIn = in;
 		msgOut = out;
 		//thisChatInfo = chatInfo;
 		
-		JList<String> messageList = new JList<>(messagesExample);
+		// convoHistory = user.getConversationHistory();
+		// messageList = convoHistory.toString;
+		JList<String> messageList = new JList<>(messagesExample); 
 		// a
 		JScrollPane messageListScrollPane = new JScrollPane(messageList);
 		messageListScrollPane.setPreferredSize(new Dimension(400,300));
@@ -129,8 +137,9 @@ public class ChatRoom {
 	
 	// update the chatRoom GUI in the background every (1 second?) for new incoming messages. 
 	// Johnny: I'm assuming we are using ConversationHistory to show previous messages in the chat room
-	public void updateChatRoom(Message inMessageObject) {
+	public void updateChatRoom() {
 		// TODO: add functionality
+		// grab the convoHistory belonging to this chat room
 	}
 	/*
 	public void openChatroom() {

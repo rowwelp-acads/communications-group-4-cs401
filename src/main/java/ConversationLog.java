@@ -25,4 +25,8 @@ public class ConversationLog {
 		return allHistories;
 	}
 	
+	public ConversationHistory getHistory(String name) {
+		return null;
+	}
+	
 }

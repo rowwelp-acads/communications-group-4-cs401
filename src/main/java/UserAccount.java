@@ -1,14 +1,32 @@
 package main.java;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.Serializable;
+import java.util.Scanner;
 
-public class UserAccount implements Serializable {
+public class UserAccount implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private static int count = 0;
+	private ChatList userChatList;
+	private ConversationLog convoLog;
 	private String id;
 	private String username;
 	private String password;
 	private ChatList chatList;
+
+	public UserAccount(String name) {
+		id = name;
+	}
+	
+	public UserAccount() {
+		
+	}
+	
+	
+	public void addMessage(Message msg) {
+		// add to conversationHistory through accessing conversationLog
+	}
 	
 	// CONSTRUCTOR
 	public UserAccount(String username, String password) {
@@ -63,6 +81,17 @@ public class UserAccount implements Serializable {
 	public String getID() {
 		return id;
 	}
+	
+	
+	public ConversationHistory getHistory(String name) {
+		return convoLog.getHistory(name);
+	}
+}
+
+	
+	/*
+=======
+>>>>>>> main
 
 //	// function that gets the current active chat
 //	public Chat getChat() {
@@ -75,5 +104,8 @@ public class UserAccount implements Serializable {
 	public String toString() {
 		return "UserAccount [userId=" + id + ",username=" + username;
 	}
-}
+<<<<<<< HEAD
+*/	
+
+
 

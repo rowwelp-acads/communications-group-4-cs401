@@ -10,6 +10,8 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import main.java.ChatList;
+import main.java.ConversationHistory;
+import main.java.MESSAGETYPE;
 import main.java.Message;
 import main.java.UserAccount;
 
@@ -40,10 +42,12 @@ public class MainHub {
 	// STREAMS
 	ObjectInputStream msgIn;
 	ObjectOutputStream msgOut;
+	UserAccount user;
+	String selectedChatRoom = "";
+	ChatRoom currentChatRoom;
 	
 	// MAIN HUB PROPERTIES
 	ChatList userChatList;
-	String selectedChatRoom = "";
     private UserAccount owner; // NOVEMBER 26
 	
 	
@@ -66,20 +70,59 @@ public class MainHub {
 	public MainHub(ObjectInputStream in, ObjectOutputStream out, UserAccount userAccount) {
 		msgIn = in;
 		msgOut = out;
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				try {
+					user = (UserAccount) msgIn.readObject();
+					
+					while (true) {
+						try {
+							Message msgObject = (Message) msgIn.readObject();
+							// check if the chatID matches with user's chat list. Update that chat history
+							// messages if matched.
+							SwingUtilities.invokeLater(() -> {
+								/*
+								user.addMessage(msgObject);
+								currentChatRoom.update();
+								*/
+								System.out.println(msgObject.getContent()); // replace with above once feature implemented
+							});
+						} catch (Exception ex) {
+							System.out.println("Error receiving msg from Server in MainHub. at line 98");
+							ex.printStackTrace();
+							break;
+						}
+					}
+				} 
+				catch (Exception ex) {
+
+				}
+			}
+		}).start();
+
 		owner = userAccount;
 		userChatList = owner.getChatList();  // Get user's ChatList
+
 	}
 	
 	public void openMainHub() {
 		
+
 		// CHAT LIST
 		// MODIFIED NOVEMBER 26
 		JList chatList = new JList(userChatList.getChatListForDisplay());
         chatsContainer.add(new JScrollPane(chatList));
 		chatList.addListSelectionListener(new ChatListSelectionListener());
 		
-		// GUI COMPONENTS
-		itButton.setEnabled(false);
+		/*
+		if (user.getITAuthorized() == false) {
+			itButton.setEnabled(false);
+		}
+		*/
+		itButton.setEnabled(false); // replace with above once feature implemented
+		
 		buttonContainer.setLayout(new BoxLayout(buttonContainer, BoxLayout.X_AXIS));
 		buttonContainer.add(itButton);
 		buttonContainer.add(createPrivateChatButton);
@@ -104,37 +147,20 @@ public class MainHub {
 		deleteChatButton.addActionListener(event);
 		openChatButton.addActionListener(event);
 		logoutButton.addActionListener(event);
+
+		chatList.addListSelectionListener(new ChatListSelectionListener());
 		
-		// MAIN HUB THREAD
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				while (true) {
-					try {
-						Message msgObject = (Message) msgIn.readObject();
-						// check if the chatID matches with user's chat list. Update that chat history messages if matched.
-						SwingUtilities.invokeLater(() -> {
-							System.out.println(msgObject.getContent());
-							/*
-							for (int i = 0; i < userChatList.getLength(); i++) {
-								if (userChatList.getChat(i).getID() == msgObject.getChatID()) {
-									userChatList.getChat(i).addMessageToHistory(msgObject);
-								}
-							} */
-						});
-					}
-					catch (Exception ex) {
-						System.out.println("Error receiving msg from Server in MainHub. at line 98");
-						ex.printStackTrace();
-						break;
-					}
-				}
-			}
-		}).start();
+        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainFrame.pack();
+		mainFrame.setAlwaysOnTop(true);
+		mainFrame.setVisible(true);
+		mainFrame.setLocationRelativeTo(null);
 	}
+		
+
+		
 	
 	// BUTTON LISTENERS
-	
 	private class EventListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent event) {
@@ -146,31 +172,39 @@ public class MainHub {
 			
 			// OPEN CHAT
 			else if (event.getActionCommand().equals("Open Chat")) {
-				JOptionPane.showMessageDialog(mainFrame, "Placeholder. Open chat method will be call here", "Info", JOptionPane.INFORMATION_MESSAGE);
-				ChatRoom chatRoom = new ChatRoom(msgIn, msgOut);
+
+				// open chat method
+				//JOptionPane.showMessageDialog(mainFrame, "Placeholder. Open chat method will be call here", "Info", JOptionPane.INFORMATION_MESSAGE);
+				currentChatRoom = new ChatRoom(msgIn, msgOut, user); // add arg name for getting chat history
 				mainFrame.setVisible(false);
 			}
 			
 			// DELETE CHAT
 			else if (event.getActionCommand().equals("Delete Chat")) {
 				JOptionPane.showMessageDialog(mainFrame, "Placeholder. Delete chat method will be call here", "Info", JOptionPane.INFORMATION_MESSAGE);
+				// TODO: send Message obj to server, with name of chat to be deleted (or exit)
 			}
 			
 			// CREATE GROUP CHAT
 			else if (event.getActionCommand().equals("Create Group Chat")) {
 				// create group chat method
 				JOptionPane.showMessageDialog(mainFrame, "Placeholder. Create group chat method will be call here", "Info", JOptionPane.INFORMATION_MESSAGE);
+				// TODO: send Message obj to server, with name of chat to be created and participant
 			}
 			
 			// CREATE PRIVATE CHAT
 			else if (event.getActionCommand().equals("Create Private Group Chat")) {
 				JOptionPane.showMessageDialog(mainFrame, "Placeholder. Create private group chat method will be call here", "Info", JOptionPane.INFORMATION_MESSAGE);
+				// Would this just be normal group chat but only between two people
 			}
 			
 			// OPEN IT BUTTON
 			else if (event.getActionCommand().equals("IT Button")) {
 				// IT Button method
 				JOptionPane.showMessageDialog(mainFrame, "Placeholder. IT button method will be call here", "Info", JOptionPane.INFORMATION_MESSAGE);
+				// still need IT GUI
+				// delete chat, get all chat history, get all users, create new user credential, delete user credential
+				// logic to be done in Server, just send Message obj of what to do to Server. 
 			}
 		}
 	}
