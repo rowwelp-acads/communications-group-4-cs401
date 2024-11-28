@@ -2,34 +2,36 @@ package main.java;
 
 import java.io.Serializable;
 
-public class UserAccount implements Serializable {
+public abstract class UserAccount implements Serializable {
     private static final long serialVersionUID = 1L;
     private static int count = 0;
     private ChatList chatList;
     private String id;
     private String username;
     private String password;
+    // abstract method -> Retrieve data from ITUser and RegularUser
+    public abstract int getAccessLevel();
 
     // Constructors
     public UserAccount(String username, String password) {
         this.id = String.valueOf(count++);
         this.username = username;
         this.password = password;
-        this.chatList = new ChatList(this); // Ensure ChatList has this constructor
+        //this.chatList = new ChatList(this); // Ensure ChatList has this constructor
     }
 
     public UserAccount(String username, String password, String id) {
         this.id = id;
         this.username = username;
         this.password = password;
-        this.chatList = new ChatList(this); // Ensure ChatList has this constructor
+        //this.chatList = new ChatList(this); // Ensure ChatList has this constructor
     }
 
     // Default Constructor
     public UserAccount() {}
 
     // Getter and Setter methods
-    public String getUserId() {
+    public String getID() {
         return id;
     }
 
@@ -57,10 +59,6 @@ public class UserAccount implements Serializable {
         return chatList;
     }
 
-    public void setChatList(ChatList chatList) {
-        this.chatList = chatList;
-    }
-
     // Override toString
     @Override
     public String toString() {
@@ -75,6 +73,26 @@ public class UserAccount implements Serializable {
     public void logout() {
         System.out.println("User " + username + " has logged out.");
     }
+    
+    public static void setCount(int newCount) {
+        count = newCount;
+    }
+    
+    public static int getCount() {
+        return count;
+    }
+    
+    /*
+    public void setChatList(ChatList chatList) {
+        this.chatList = chatList;
+    }
+    */
+    
+    /*
+    public void setChatList() {
+        this.chatList = new ChatList(this);
+    }
+    */
 }
 
 

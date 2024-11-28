@@ -2,6 +2,7 @@ package main.java.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
@@ -11,6 +12,8 @@ import javax.swing.event.ListSelectionListener;
 
 import main.java.ChatList;
 import main.java.ConversationHistory;
+import main.java.ITUser;
+import main.java.RegularUser;
 import main.java.MESSAGETYPE;
 import main.java.Message;
 import main.java.UserAccount;
@@ -42,7 +45,6 @@ public class MainHub {
 	// STREAMS
 	ObjectInputStream msgIn;
 	ObjectOutputStream msgOut;
-	UserAccount user;
 	String selectedChatRoom = "";
 	ChatRoom currentChatRoom;
 	
@@ -67,16 +69,30 @@ public class MainHub {
 	
 	// MODIFIED NOVEMBER 26 KA
 	// ADDED USER ACCOUNT
-	public MainHub(ObjectInputStream in, ObjectOutputStream out, UserAccount userAccount) {
+	public MainHub(ObjectInputStream in, ObjectOutputStream out) {
 		msgIn = in;
 		msgOut = out;
+		// block process until MainHub receive UserAccount from Server then proceed
+		try {
+			Object temp =  msgIn.readObject();
+			if (temp instanceof ITUser) {
+				owner = (ITUser) temp;
+			}
+			else {
+				owner = (RegularUser) temp;
+			}
+			userChatList = owner.getChatList();  // Get user's ChatList
+		} 
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		// Background thread to listen to Server
 		new Thread(new Runnable() {
 
 			@Override
 			public void run() {
 				try {
-					user = (UserAccount) msgIn.readObject();
-					
 					while (true) {
 						try {
 							Message msgObject = (Message) msgIn.readObject();
@@ -97,31 +113,26 @@ public class MainHub {
 					}
 				} 
 				catch (Exception ex) {
-
+					ex.printStackTrace();
 				}
 			}
 		}).start();
 
-		owner = userAccount;
-		userChatList = owner.getChatList();  // Get user's ChatList
-
 	}
-	
+
 	public void openMainHub() {
 		
 
 		// CHAT LIST
 		// MODIFIED NOVEMBER 26
-		JList chatList = new JList(userChatList.getChatListForDisplay());
+		//JList chatList = new JList(userChatList.getChatListForDisplay());
+		JList chatList = new JList(new String[] {"Chat rooms to be display here"});
         chatsContainer.add(new JScrollPane(chatList));
 		chatList.addListSelectionListener(new ChatListSelectionListener());
 		
-		/*
-		if (user.getITAuthorized() == false) {
+		if (owner.getAccessLevel() == 1) {
 			itButton.setEnabled(false);
 		}
-		*/
-		itButton.setEnabled(false); // replace with above once feature implemented
 		
 		buttonContainer.setLayout(new BoxLayout(buttonContainer, BoxLayout.X_AXIS));
 		buttonContainer.add(itButton);
@@ -175,7 +186,7 @@ public class MainHub {
 
 				// open chat method
 				//JOptionPane.showMessageDialog(mainFrame, "Placeholder. Open chat method will be call here", "Info", JOptionPane.INFORMATION_MESSAGE);
-				currentChatRoom = new ChatRoom(msgIn, msgOut, user); // add arg name for getting chat history
+				currentChatRoom = new ChatRoom(msgIn, msgOut, owner); // add arg name for getting chat history
 				mainFrame.setVisible(false);
 			}
 			
