@@ -20,7 +20,6 @@ public class ClientHandler extends Thread {
 	private OutputStream outputStream;
 	private ObjectOutputStream objectOutputStream;
 	private UserAccount user;
-	private ChatList userChatList;
 
 	// Constructor
 	public ClientHandler(Socket socket) throws IOException {
@@ -38,8 +37,8 @@ public class ClientHandler extends Thread {
 	}
 
 	// getter for ID
-	public String getID() {
-		return clientId;
+	public UserAccount getAccount() {
+		return user;
 	}
 
 	// getter for ObjectOutputStream 
@@ -62,13 +61,11 @@ public class ClientHandler extends Thread {
 						// message to be return to sender
 						Message returnVerification = new Message(verificationResult);
 						returnVerification.setMessageType(MESSAGETYPE.LOGINTOSEND);
-						// return message but should return just true for now for debugging first
-						//objectOutputStream.writeObject(returnVerification);
-						System.out.println("log in success");
-						objectOutputStream.writeObject(new Message("true", null));
+						// return log-in result
+						objectOutputStream.writeObject(returnVerification);
 						objectOutputStream.flush();
 						
-						verificationResult = "true"; // for debugging only, remove in final version
+						//verificationResult = "true"; // for debugging only, remove in final version
 						// if user is logged in with correct credentials
 						if (verificationResult == "true") {
 							// add client to hashmap using username
@@ -76,16 +73,8 @@ public class ClientHandler extends Thread {
 							Server.addClient(objectIn.getUsername(), this);
 							System.out.println("New client connected - userName: " + objectIn.getUsername());
 							
-							// TODO: check if client is IT
-							// for simplicity, a separated method for checking a separated file with list of IT username in it.
-							// only check if user exist first.
-							// String itVerify = Server.verifyIT(objectIn);
-							
-							// initialize empty userAccount
-							user = new UserAccount();
-							// open UserAccount using username
-							// UserAccount will open file and grab chatList and chatLog( + chatHistory in it) and saved to its attributes
-							user.openUserAccount(objectIn.getUsername());
+							// grab user account from userDatabase
+							user = Server.getAccount(objectIn.getUsername());	
 							
 							// return UserAccount to user for displaying chats
 							objectOutputStream.writeObject(user);

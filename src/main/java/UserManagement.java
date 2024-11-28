@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.*;
 
 
-public class UserManagement {
+public class UserManagement implements Serializable{
     // File path for storing user credentials
     private static final String USER_FILE = "src/main/java/useraccounts.txt";
     
@@ -69,7 +69,7 @@ public class UserManagement {
         System.out.println("\nSetting up ChatLists for users...");
         for (UserAccount user : userList) {
             System.out.println("Processing user: " + user.getUsername());
-            user.setChatList(); // Ensure each user initializes their ChatList
+            //user.setChatList(); // Ensure each user initializes their ChatList
             System.out.println("ChatList created for user: " + user.getUsername());}
         } 
 
@@ -86,6 +86,17 @@ public class UserManagement {
             }
         }
         return null;  // Return null if no matching user is found
+    }
+    
+    public UserAccount getAccount(String username) {
+    	int userAccountIndex = 0;
+    	for (int i = 0; i < userList.size(); i++) {
+    		if (userList.get(i).getUsername().equals(username)) {
+    			userAccountIndex = i;
+    			break;
+    		}
+    	}
+    	return userList.get(userAccountIndex);
     }
 
     public boolean addUser(String username, String password) {

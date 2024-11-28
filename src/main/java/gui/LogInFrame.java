@@ -45,7 +45,7 @@ public class LogInFrame {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(500, 550);			// Set the size of the frame on open
         frame.setLocationRelativeTo(null); // Center on screen
-        System.out.println("Here");
+        //System.out.println("Here");
         // Main Panel with BoxLayout
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
@@ -68,10 +68,12 @@ public class LogInFrame {
         
         // Create textField for Usernames and Passwords	-	-	-	-	-	-	-
         // Username TextField
-        usernameField = new JTextField(20);
+        usernameField = new JTextField("ituser");
+        //usernameField = new JTextField(20);
         usernameField.setMaximumSize(new Dimension(Integer.MAX_VALUE,25));
         // Password TextField
-        passwordField = new JPasswordField(20);
+        passwordField = new JPasswordField("ituser123");
+        //passwordField = new JPasswordField(20);
         passwordField.setMaximumSize(new Dimension(Integer.MAX_VALUE,25));
         
         // Create SubPanels to hold the Lables and textFields
@@ -119,12 +121,12 @@ public class LogInFrame {
                 	msgOut.flush();
                 	
                 	Message serverRespond = (Message) msgIn.readObject(); // return message from server
-                	
-                	if (serverRespond.getType() == MESSAGETYPE.LOGINTOSEND && serverRespond.getUsername().equals("true")) { // check return message
+                	//System.out.println(serverRespond.getContent());
+                	if (serverRespond.getType() == MESSAGETYPE.LOGINTOSEND && serverRespond.getContent().equals("true")) { // check return message
 						mainHub = new MainHub(msgIn, msgOut);
 						mainHub.openMainHub();
-						//frame.setVisible(false);
-						frame.dispose();
+						frame.setVisible(false);
+						//frame.dispose();
                 	}
                 	else {
                 		JOptionPane.showMessageDialog(frame, "Error: Log-in failed. Please try again.", "Error", JOptionPane.ERROR_MESSAGE); // if return message is "false"
@@ -132,6 +134,7 @@ public class LogInFrame {
                 }
                 catch (Exception ex) {
                 	System.out.println("Sending/receiving login msg error at line 108 LogInFrame, server not connected.");
+                	ex.printStackTrace();
                 }
             }
         });
@@ -153,7 +156,7 @@ public class LogInFrame {
         // Add mainpanel to the frame
         frame.add(mainPanel);
         frame.setVisible(true);
-        System.out.println("Here");
+        //System.out.println("Here");
     }
 
 //    public static void main(String[] args) {
