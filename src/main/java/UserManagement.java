@@ -64,14 +64,6 @@ public class UserManagement {
     	    e.printStackTrace();
     	}
 }
-    
-    public void setupChatLists() {
-        System.out.println("\nSetting up ChatLists for users...");
-        for (UserAccount user : userList) {
-            System.out.println("Processing user: " + user.getUsername());
-            user.setChatList(); // Ensure each user initializes their ChatList
-            System.out.println("ChatList created for user: " + user.getUsername());}
-        } 
 
     
     public boolean verifyCredentials(String username, String password) {
@@ -137,14 +129,30 @@ public class UserManagement {
     }
     
 
-    // Helper method that rewrites the entire user credentials file
-    // Used after removing a user to ensure file matches memory state
+//    // Helper method that rewrites the entire user credentials file
+//    // Used after removing a user to ensure file matches memory state
+//    private void rewriteUserFile() throws IOException {
+//        try (BufferedWriter writer = new BufferedWriter(new FileWriter(USER_FILE))) {
+//            for (Map.Entry<String, String> entry : userCredentials.entrySet()) {
+//                writer.write(entry.getKey() + "," + entry.getValue());
+//                writer.newLine();
+//            }
+//        }
+//    }
+    
     private void rewriteUserFile() throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(USER_FILE))) {
-            for (Map.Entry<String, String> entry : userCredentials.entrySet()) {
-                writer.write(entry.getKey() + "," + entry.getValue());
+            // Write each user account with their ID
+            for (UserAccount user : userList) {
+                writer.write(user.getUsername() + "," + 
+                            user.getPassword() + "," + 
+                            user.getID());
                 writer.newLine();
             }
+            
+            // Write the current count as the last line
+            writer.write(String.valueOf(UserAccount.getCount()));
+            writer.newLine();
         }
     }
     

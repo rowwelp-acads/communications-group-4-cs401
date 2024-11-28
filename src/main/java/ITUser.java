@@ -37,7 +37,7 @@ public class ITUser extends UserAccount {
     }
     
     public List<UserAccount> getAllUsers() {
-        Set<String> usernames = userManagement.getAllUsernames();
+    	Set<String> usernames = userManagement.getAllUsernames();
         List<UserAccount> userList = new ArrayList<>();
         
         for(String username : usernames) {
@@ -54,10 +54,11 @@ public class ITUser extends UserAccount {
         return userManagement.removeUser(username);
     }
     
-    public boolean newUser(String accountType, String username, String password) {
+    public boolean newUser(String username, String password) {
         if (userManagement.userExists(username)) {
             return false;
         }
+        
         return userManagement.addUser(username, password);
     }
     
