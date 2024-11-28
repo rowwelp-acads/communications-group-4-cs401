@@ -2,13 +2,15 @@ package main.java;
 
 import java.io.Serializable;
 
-public class UserAccount implements Serializable {
+public abstract class UserAccount implements Serializable {
     private static final long serialVersionUID = 1L;
     private static int count = 0;
     private ChatList chatList;
     private String id;
     private String username;
     private String password;
+    // abstract method -> Retrieve data from ITUser and RegularUser
+    public abstract int getAccessLevel();
 
     // Constructors
     public UserAccount(String username, String password) {
@@ -57,10 +59,6 @@ public class UserAccount implements Serializable {
         return chatList;
     }
 
-    public void setChatList(ChatList chatList) {
-        this.chatList = chatList;
-    }
-
     // Override toString
     @Override
     public String toString() {
@@ -84,9 +82,17 @@ public class UserAccount implements Serializable {
         return count;
     }
     
+    /*
+    public void setChatList(ChatList chatList) {
+        this.chatList = chatList;
+    }
+    */
+    
+    /*
     public void setChatList() {
         this.chatList = new ChatList(this);
     }
+    */
 }
 
 

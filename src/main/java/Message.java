@@ -33,10 +33,9 @@ public class Message implements Serializable {
 	}
 	
 	// CONSTRUCTORS
-	// Regular Chat Messages with recipients
 	// added by Johnny
 	// mostly for debugging for now
-	public Message(String content) { // chatID here
+	public Message(String content) {
 		this.content = content;
 		this.timestamp = new Date();
 	}

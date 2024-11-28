@@ -15,7 +15,7 @@ public class Server {
     
     
     
-    private static UserManagement database = new UserManagement();
+    private static UserManagement userDatabase = new UserManagement();
     private static ConversationLog serverLog = new ConversationLog("00");
     
     // Will hold all UserAccount's designated chatList 
@@ -53,27 +53,29 @@ public class Server {
      * method to broadcast messages
      * called in ClientHandler
      */
-    public static void broadcastMessageToClient(Message message) throws IOException {
-    	synchronized (clients) {
-    		// check for recipients (matching name with String key)
-    		// broadcast msg to them only
-    		// add msg to their UserAccount chat History
-    		for (Map.Entry<String, ClientHandler> entry : clients.entrySet()) {
-    			ClientHandler clientInMap = entry.getValue();
-    			ObjectOutputStream out = clientInMap.getOut();
-    			//System.out.println(message.getContent()); // test check content
-    			try {
-        			out.writeObject(message);
-        			out.flush();
-    			}
-    			catch (Exception ex) {
-    				System.out.println("Error sending msg from Server to Client");
-    				ex.printStackTrace();
-    			}
-    		}
-    	}
-    	
-    }
+	public static void broadcastMessageToClient(Message message) throws IOException {
+		synchronized (clients) {
+			// check for recipients (matching name with String key)
+			// broadcast msg to them only
+			// add msg to their UserAccount chat History
+			List<UserAccount> recipents = message.getParticipants();
+			for (int i = 0; i < clients.size(); i++) {
+				if (clients.get(recipents.get(i).getUsername()) != null) {
+					ObjectOutputStream out = clients.get(recipents.get(i).getUsername()).getOut();
+					try {
+						out.writeObject(message);
+						out.flush();
+					} catch (Exception ex) {
+						System.out.println("Error sending msg from Server to Client");
+						ex.printStackTrace();
+					}
+				}
+			}
+			
+			//TODO: add message to their history
+		}
+
+	}
     
     /*
      * method to verify credential
@@ -81,7 +83,7 @@ public class Server {
      */
     public static String verify(Message message) {
     	// verifying credentials
-		boolean verification = database.verifyCredentials(message.getUsername(), message.getPassword());
+		boolean verification = userDatabase.verifyCredentials(message.getUsername(), message.getPassword());
 		// converted boolean of verifyCredientials into String for sending as message
 		String verificationResult = String.valueOf(verification);
     	return verificationResult;
@@ -107,6 +109,9 @@ public class Server {
         }
     }
     
+    public static UserAccount getAccount(String username) {
+    	return userDatabase.getAccount(username);
+    }
     
     // Method to get the User's Chat List
     public static List<Integer> getUserChatList(String userID) {

@@ -1,10 +1,12 @@
 package main.java;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class ITUser extends UserAccount {
+public class ITUser extends UserAccount implements Serializable{
+	private static final long serialVersionUID = 1L;
     private int accessLevel;
     private UserManagement userManagement;
     
