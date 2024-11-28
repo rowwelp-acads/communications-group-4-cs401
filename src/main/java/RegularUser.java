@@ -1,7 +1,10 @@
 package main.java;
 
+import java.io.Serializable;
+
 // TODO: Write JUnit tests! @BryanMadrigal
-public class RegularUser extends UserAccount {
+public class RegularUser extends UserAccount implements Serializable{
+	private static final long serialVersionUID = 2L;
     // Attributes
     private int accessLevel;
 
@@ -10,7 +13,7 @@ public class RegularUser extends UserAccount {
         // Calls the UserAccount Constructor
         super(username, password, id);
         this.accessLevel = 1; // Default access level
-    }
+    } 
 
     // Constructor
     public RegularUser(String username, String password) {
