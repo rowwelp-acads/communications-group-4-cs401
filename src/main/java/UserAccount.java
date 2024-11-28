@@ -15,14 +15,14 @@ public class UserAccount implements Serializable {
         this.id = String.valueOf(count++);
         this.username = username;
         this.password = password;
-        //this.chatList = new ChatList(this); // Ensure ChatList has this constructor
+        this.chatList = new ChatList(this); // Ensure ChatList has this constructor
     }
 
     public UserAccount(String username, String password, String id) {
         this.id = id;
         this.username = username;
         this.password = password;
-        //this.chatList = new ChatList(this); // Ensure ChatList has this constructor
+        this.chatList = new ChatList(this); // Ensure ChatList has this constructor
     }
 
     // Default Constructor
