@@ -104,6 +104,19 @@ public class ClientHandler extends Thread {
 		                objectOutputStream.flush();
 		            }
 					
+					// send chat history request
+		            else if (objectIn.getType() == MESSAGETYPE.GETHISTORY) {
+		                int chatID = objectIn.getChatID(); 
+		                
+		                // Get chat IDs from server's ChatListManager
+		                List<String> chatHistory = Server.getChatHistory(chatID);
+		                
+		                // Create and send response
+		                Message response = new Message(MESSAGETYPE.SENDHISTORY, chatHistory);
+		                objectOutputStream.writeObject(response);
+		                objectOutputStream.flush();
+		            }
+					
 					// send chat creation request
 		            else if (objectIn.getType() == MESSAGETYPE.ADD_CHAT) {
 		                Server.addChatToList(objectIn.getSender().getID(), objectIn.getChatID());

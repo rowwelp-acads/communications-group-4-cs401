@@ -47,19 +47,16 @@ public class ConversationLog {
 	
 	
 	public void write(int chatID) {
-		if (!this.doesItExist(chatID)) return;
 		
 		String chatFile = Integer.toString(chatID);
 		String fileName = chatFile.concat(".txt");
 		
-		List<String> history = allHistories.get(chatID).getMessageList();
-		
 		FileWriter myWriter;
-		
 		
 		try {
 			myWriter = new FileWriter(fileName);
 			
+			List<String> history = allHistories.get(chatID).getMessageList();
 			for (int i = 0; i < history.size(); i++) {
 			myWriter.write(history.get(i));
 			}
@@ -74,10 +71,16 @@ public class ConversationLog {
 	
 	public List<String> load(int chatID) {
 		
+		if(!allHistories.containsKey(chatID)) {
+			ConversationHistory newHistory = new ConversationHistory(chatID);
+			allHistories.put(chatID, newHistory);
+			return newHistory.getMessageList();
+		}
+		
 		String chatFile = Integer.toString(chatID);
 		String filename = chatFile.concat(".txt");
 		
-		List<String> history = new ArrayList<>();
+		ConversationHistory history = allHistories.get(chatID);
 		
 		File openfile = new File(filename);
     	
@@ -85,7 +88,7 @@ public class ConversationLog {
             Scanner scanner = new Scanner(openfile);
             while (scanner.hasNextLine()) {
             	String data = scanner.nextLine();
-            	history.add(data);
+            	history.addMessage(data);
             }
             
             scanner.close();
@@ -93,7 +96,7 @@ public class ConversationLog {
         System.out.println(e);
         }
 		
-        return history;
+        return history.getMessageList();
         
 	}
 	

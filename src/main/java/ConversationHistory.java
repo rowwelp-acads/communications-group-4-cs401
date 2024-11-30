@@ -30,10 +30,9 @@ public class ConversationHistory implements Serializable {
 		return Messages;
 	}
 	
-	public void load() {
+	//for pre-existing chat
+	public void load(int chatID) {
 		
-		//to do
-
 	}
 	
 	
