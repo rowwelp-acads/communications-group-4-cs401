@@ -1,5 +1,7 @@
 package main.java;
 
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 public abstract class UserAccount implements Serializable {
@@ -11,20 +13,28 @@ public abstract class UserAccount implements Serializable {
     private String password;
     // abstract method -> Retrieve data from ITUser and RegularUser
     public abstract int getAccessLevel();
+    
+    // ADDED NOVEMBER 28 KA
+    private ObjectOutputStream out;
+    private ObjectInputStream in;
 
     // Constructors
-    public UserAccount(String username, String password) {
+    public UserAccount(String username, String password, ObjectOutputStream out, ObjectInputStream in) {
         this.id = String.valueOf(count++);
         this.username = username;
         this.password = password;
-        //this.chatList = new ChatList(this); // Ensure ChatList has this constructor
+        this.out = out;
+        this.in = in;
+        this.chatList = new ChatList(this, in, out); // Ensure ChatList has this constructor
     }
 
-    public UserAccount(String username, String password, String id) {
+    public UserAccount(String username, String password, String id, ObjectOutputStream out, ObjectInputStream in) {
         this.id = id;
         this.username = username;
         this.password = password;
-        //this.chatList = new ChatList(this); // Ensure ChatList has this constructor
+        this.out = out;
+        this.in = in;
+        this.chatList = new ChatList(this, in, out); // Ensure ChatList has this constructor
     }
 
     // Default Constructor
