@@ -85,4 +85,34 @@ public class ConversationHistory implements Serializable {
 
 	}
 	
+	public void load(int newID) {
+		
+		chatID = newID;
+		
+		String chatFile = Integer.toString(chatID);
+		String filename = chatFile.concat(".txt");
+		
+    	File openfile = new File(filename);
+    	
+    	try {
+    		//prevents opening a file that doesn't exist
+			if (openfile.createNewFile()) return;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	
+        try {
+            Scanner scanner = new Scanner(openfile);
+            while (scanner.hasNextLine()) {
+            	String data = scanner.nextLine();
+            	Messages.add(data);
+            }
+            
+            scanner.close();
+        } catch (Exception e) {
+        System.out.println(e);
+        }
+		
+	}
+	
 }
