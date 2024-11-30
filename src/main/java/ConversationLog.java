@@ -5,28 +5,22 @@ import java.util.List;
 
 public class ConversationLog {
 
-	private String logId;
-	private List<ConversationHistory> allHistories;
+	private List<Integer> allHistories;
 	
-	public ConversationLog(String logId) {
-		this.logId = logId;
-		allHistories = new ArrayList<ConversationHistory>();
+	public ConversationLog() {
+		allHistories = new ArrayList<>();
+	}
+		
+	public void addConversationHistory(int ChatID) {
+		allHistories.add(ChatID);
 	}
 	
-	public String getLogId() {
-		return logId;
-	}
-	
-	public void addConversationHistory(ConversationHistory hist) {
-		allHistories.add(hist);
-	}
-	
-	public List<ConversationHistory> getAllHistories() {
+	public List<Integer> displayList() {
 		return allHistories;
 	}
 	
-	public ConversationHistory getHistory(String name) {
-		return null;
+	public boolean doesItExist(int chatID) {
+		return allHistories.contains(chatID);
 	}
 	
 }

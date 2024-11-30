@@ -14,8 +14,8 @@ public class Chat {
 
 	public Chat(UserAccount owner) {
 		creator = owner;
-		history = new ConversationHistory();
 		uniqueID = count++;
+		history = new ConversationHistory(uniqueID);
 	}
 	
 	// this method is to add the Message to chat history to be displayed in ChatRoom
