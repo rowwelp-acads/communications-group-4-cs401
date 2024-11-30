@@ -1,28 +1,82 @@
 package main.java;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class ConversationHistory implements Serializable {
+	private int chatID;
 	private List<String> Messages;
-	private String chatName;
 	
-	public ConversationHistory() {
+	public ConversationHistory(int id) {
+		this.chatID = id;
 		Messages = new ArrayList<>();
 	}
-
-	public String getName() {
-		return chatName;
+	
+	public int getChatID() {
+		return chatID;
+	}
+	
+	public void addMessageToHistory(Message newMessage) {
+		String message = newMessage.getSender() + "|" + newMessage.getTimestamp() + "|" + newMessage.getContent();
+		Messages.add(message);
 	}
 
+	public List<String> getMessageList() {
+		return Messages;
+	}
 	
-	/*
-	 * not sure if this should be here, delete if not
-	 */
-//	public List<Message> getLatestMessages(String chatId) {
-//		//update method if it does not match with chat loadconvo command
-//		return chats.get(chatId).loadConversationalHistory();
-//	}
-//	
+	public void write() {
+		String chatFile = Integer.toString(chatID);
+		String fileName = chatFile.concat(".txt");
+		
+		FileWriter myWriter;
+		
+		try {
+			myWriter = new FileWriter(fileName);
+			
+			for (int i = 0; i < Messages.size(); i++) {
+			myWriter.write(Messages.get(i));
+			}
+			
+			myWriter.close();
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public void load() {
+		
+		String chatFile = Integer.toString(chatID);
+		String filename = chatFile.concat(".txt");
+		
+    	File openfile = new File(filename);
+    	
+    	try {
+    		//prevents opening a file that doesn't exist
+			if (openfile.createNewFile()) return;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	
+        try {
+            Scanner scanner = new Scanner(openfile);
+            while (scanner.hasNextLine()) {
+            	String data = scanner.nextLine();
+            	Messages.add(data);
+            }
+            
+            scanner.close();
+        } catch (Exception e) {
+        System.out.println(e);
+        }
+
+	}
+	
 }

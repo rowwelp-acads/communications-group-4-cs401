@@ -16,8 +16,8 @@ public class Chat {
 
 	public Chat(UserAccount owner) {
 		creator = owner;
-		history = new ConversationHistory();
 		uniqueID = count++;
+		history = new ConversationHistory(uniqueID);
 	}
 	
 	// IF GUI BUTTON PRESSED
