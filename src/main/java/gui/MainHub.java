@@ -186,7 +186,7 @@ public class MainHub {
 
 				// open chat method
 				//JOptionPane.showMessageDialog(mainFrame, "Placeholder. Open chat method will be call here", "Info", JOptionPane.INFORMATION_MESSAGE);
-				currentChatRoom = new ChatRoom(msgIn, msgOut, owner); // add arg name for getting chat history
+				currentChatRoom = new ChatRoom(msgIn, msgOut, owner, selectedChatRoom); // add arg name for getting chat history
 				mainFrame.setVisible(false);
 			}
 			
