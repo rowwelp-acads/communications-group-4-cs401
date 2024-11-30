@@ -153,6 +153,7 @@ public class ChatRoom {
 	}
 	*/
 	
+	// parses the selectedChatRoom that comes from the MainHub and extracts the ChatID
 	private int parseChatID(String selectedChatRoom) {
 	    if (selectedChatRoom == null || !selectedChatRoom.startsWith("Chat ")) {
 	        throw new IllegalArgumentException("Invalid chat room format.");
@@ -165,6 +166,7 @@ public class ChatRoom {
 	    }
 	}
 	
+	// Converts a List of String to an Array, allowing JList to accept it.
 	private String[] convertListToArray(List<String> list) {
 	    if (list == null) {
 	        throw new IllegalArgumentException("The provided list cannot be null.");
