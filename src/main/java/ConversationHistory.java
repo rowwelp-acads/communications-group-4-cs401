@@ -25,13 +25,7 @@ public class ConversationHistory implements Serializable {
 		String message = newMessage.getSender() + "|" + newMessage.getTimestamp() + "|" + newMessage.getContent();
 		Messages.add(message);
 	}
-	
-	public void addMessage(Message message) {
 		
-	}
-	
-	
-
 	public List<String> getMessageList() {
 		return Messages;
 	}
