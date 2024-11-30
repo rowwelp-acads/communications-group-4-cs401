@@ -119,9 +119,9 @@ public class ChatList implements Serializable {
         // for every chatID inside the list of chatIDs a userAccount has taken from the Server,
         for (Integer chatID : chatIDs) {
         	// Create a new Chat
-            Chat newChat = new Chat(owner);
+            Chat newChat = new Chat(owner, chatID, in, out);
             // Then set the ID of that chat so it gets it's conversation history
-            newChat.setID(chatID);
+//            newChat.setID(chatID);
             // Then update this userAccount's listofChats
             listOfChats.add(newChat);
         }

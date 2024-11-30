@@ -133,4 +133,9 @@ public class Server {
         return chatListManager;
     }
     
+    //get chathistory
+    public static List<String> getChatHistory(int chatID) {
+    	return serverLog.getHistory(chatID).getMessageList();
+    }
+    
 }

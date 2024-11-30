@@ -26,6 +26,9 @@ public class Message implements Serializable {
 	// NOVEMBER 28 KA
 	
     private List<Integer> chatIDs;
+    
+    // content for chathistory
+    private List<String> chatHistory;
 	
 	// CONSTRUCTORS
 	// Regular Chat Messages
@@ -71,6 +74,19 @@ public class Message implements Serializable {
         this.chatIDs = chatIDs;
         this.timestamp = new Date();
         this.type = type;
+    }
+    
+    //constructor
+    //request chat history
+    public Message(int chatID, MESSAGETYPE type) {
+    	this.chatID = chatID;
+    	this.type = type;
+    }
+    
+    //send chat History
+    public Message(MESSAGETYPE type, List<String> history) {
+    	this.type = type;
+    	this.chatHistory = history;
     }
 	
 	public UserAccount getSender() {
@@ -122,6 +138,10 @@ public class Message implements Serializable {
         return chatIDs;
     }
 	
+    // NOVEMBER 29 JH
+    public List<String> getChatHistory() {
+    	return chatHistory;
+    }
 	
 	
 }
