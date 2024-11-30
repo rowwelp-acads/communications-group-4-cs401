@@ -39,6 +39,7 @@ public class Chat {
 	
 	public void setID(int ID) {
 		this.uniqueID = ID;
+		history.load(ID);
 	}
 	
 	public Boolean addParticipant(UserAccount user) {
@@ -49,7 +50,7 @@ public class Chat {
            }
 		}
 		
-		// Chat does not have a handle to the network, so the chatroom will handle the checking and retrieval of UserAccount from Server.
+		// Chat does not have a handle to the network, so the UserList will handle the checking and retrieval of UserAccount from Server.
 		// This method will quite literally just add the checked userAccount.
 		
 		participants.add(user); 
