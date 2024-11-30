@@ -18,6 +18,10 @@ public class ConversationLog {
 		allHistories.put(newHistory.getChatID(), newHistory);
 	}
 	
+	public void addMessageToLog(int chatID, Message newMessage) {
+		allHistories.get(chatID).addMessageToHistory(newMessage);;
+	}
+	
 	public List<Integer> displayList() {
 		Set<Integer> keys = allHistories.keySet();
 		List<Integer> logList = new ArrayList<>();
