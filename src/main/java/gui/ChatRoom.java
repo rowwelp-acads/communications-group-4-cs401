@@ -14,11 +14,11 @@ import main.java.MESSAGETYPE;
 import main.java.Message;
 import main.java.UserAccount;
 
+import java.util.List;
+
 public class ChatRoom {
 	JFrame chatroomFrame = new JFrame("Chatroom");
 	
-	// hold information of this chat room ? is this needed?
-	// Chat thisChatInfo;
 	
 	// A
 	JPanel chatPanel = new JPanel();
@@ -36,18 +36,27 @@ public class ChatRoom {
 	ObjectOutputStream msgOut;
 	
 	UserAccount user;
+	
+	Chat chat;
 	ConversationHistory convoHistory;
 	
+	List<String> messages;
 	
-	public ChatRoom(ObjectInputStream in, ObjectOutputStream out, UserAccount user) {
+	
+	public ChatRoom(ObjectInputStream in, ObjectOutputStream out, UserAccount user, String selectedChatRoom) {
 		this.user = user;
 		msgIn = in;
 		msgOut = out;
-		//thisChatInfo = chatInfo;
 		
-		// convoHistory = user.getConversationHistory();
-		// messageList = convoHistory.toString;
-		JList<String> messageList = new JList<>(messagesExample); 
+		chat = user.getChatList().getChat(parseChatID(selectedChatRoom));
+		
+		convoHistory = chat.getConversationHistory();
+		messages = convoHistory.getMessageList();
+		
+		
+		
+		JList<String> messageList = new JList<>(convertListToArray(messages)); 
+		
 		// a
 		JScrollPane messageListScrollPane = new JScrollPane(messageList);
 		messageListScrollPane.setPreferredSize(new Dimension(400,300));
@@ -143,4 +152,23 @@ public class ChatRoom {
 		//chatroom.openChatroom();
 	}
 	*/
+	
+	private int parseChatID(String selectedChatRoom) {
+	    if (selectedChatRoom == null || !selectedChatRoom.startsWith("Chat ")) {
+	        throw new IllegalArgumentException("Invalid chat room format.");
+	    }
+	    String chatID = selectedChatRoom.substring(5); // Extracts the part after "Chat "
+	    try {
+	        return Integer.parseInt(chatID); // Converts the extracted part to an integer
+	    } catch (NumberFormatException e) {
+	        throw new IllegalArgumentException("Invalid chat room format. Chat ID must be a number.");
+	    }
+	}
+	
+	private String[] convertListToArray(List<String> list) {
+	    if (list == null) {
+	        throw new IllegalArgumentException("The provided list cannot be null.");
+	    }
+	    return list.toArray(new String[0]); // Converts the list to a String array
+	}
 }
