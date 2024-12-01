@@ -101,7 +101,6 @@ public class ChatRoom {
 					e1.printStackTrace();
 				}
 			}
-
 		});
 		
 		userListButton.addActionListener(e -> {
