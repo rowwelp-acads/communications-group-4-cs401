@@ -5,6 +5,9 @@ import java.io.*; // For input/output operations
 import java.net.*; // For network/socket operations
 import java.util.List;
 import java.util.UUID; // For generating unique IDs
+/*
+ * CHATLIST, CONVOHISTORY, CHAT, CONVOLOG
+ */
 
 // ClientHandler manages each individual client connection
 // Extends Thread so each client runs on its own thread
@@ -134,9 +137,18 @@ public class ClientHandler extends Thread {
 		            else if (objectIn.getType() == MESSAGETYPE.REMOVE_CHAT) {
 		                Server.removeChatFromList(objectIn.getSender().getID(), objectIn.getChatID());
 		            }
-					
+					else if (objectIn.getType() == MESSAGETYPE.ADD_ACCOUNT) {
+						Server.addNewAccount(objectIn.getUsername(), objectIn.getPassword());
+					}
+					else if (objectIn.getType() == MESSAGETYPE.REMOVE_ACCOUNT) {
+						Server.removeAccount(objectIn.getUsername());
+					}
 					// disconnect request
 					else if (objectIn.getType() == MESSAGETYPE.DISCONNECT) {
+						for (int i = 0; i < user.getChatList().getListOfChats().size(); i++) {
+							Server.writeHistory(user.getChatList().getListOfChats().get(i).getID());
+						}
+						System.out.println("User: " + user.getUsername() + " logged out.");
 						break;
 					}
 				} catch (Exception e) {

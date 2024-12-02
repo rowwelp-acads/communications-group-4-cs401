@@ -1,5 +1,6 @@
 package main.java.gui;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -38,7 +39,6 @@ public class MainHub extends JFrame{
 	// GUI PROPERTIES
 	JFrame mainFrame = new JFrame("Main Hub");
 	JButton itButton = new JButton("IT Button");
-	JButton createPrivateChatButton = new JButton("Create Private Group Chat");
 	JButton createGroupChatButton = new JButton("Create Group Chat");
 	JButton deleteChatButton = new JButton("Delete Chat");
 	JButton openChatButton = new JButton("Open Chat");
@@ -46,6 +46,9 @@ public class MainHub extends JFrame{
 	JPanel buttonContainer = new JPanel();
 	JPanel chatsContainer = new JPanel();
 	boolean closing = false;
+	boolean roomSelected = false;
+	Message msgObject;
+	JList chatList;
 	
 	// STREAMS
 	Socket socket;
@@ -57,7 +60,7 @@ public class MainHub extends JFrame{
 	// MAIN HUB PROPERTIES
 	ChatList userChatList;
     private UserAccount owner; // NOVEMBER 26
-	
+
 	
     // DELETED NOVEMBER 26 KA
 //	String chatExample[] = {"2nd Floor group chat",
@@ -88,6 +91,7 @@ public class MainHub extends JFrame{
 			else {
 				owner = (RegularUser) temp;
 			}
+			System.out.println(owner.getChatList());
 			userChatList = owner.getChatList();  // Get user's ChatList
 		} 
 		catch (Exception e) {
@@ -102,15 +106,23 @@ public class MainHub extends JFrame{
 				try {
 					while (closing == false) {
 						try {
-							Message msgObject = (Message) msgIn.readObject();
+							Object object = msgIn.readObject();
+							
+							if (object instanceof Message) {
+								msgObject = (Message) object;
+							}
 							// check if the chatID matches with user's chat list. Update that chat history
 							// messages if matched.
 							SwingUtilities.invokeLater(() -> {
-								/*
-								user.addMessage(msgObject);
-								currentChatRoom.update();
-								*/
-								System.out.println(msgObject.getContent()); // replace with above once feature implemented
+								// add the message to convoHistory
+								owner.addMessage(msgObject);
+								
+								// if the message also belong to the current active chat room, update its GUI to display the new history
+								if (currentChatRoom != null && msgObject.getChatID() == currentChatRoom.getChatID()) {
+									currentChatRoom.updateChatRoom();
+								}
+								
+								//System.out.println(msgObject.getContent()); // replace with above once feature implemented
 							});
 						} catch (Exception ex) {
 							if (!closing) {
@@ -136,9 +148,11 @@ public class MainHub extends JFrame{
 
 		// CHAT LIST
 		// MODIFIED NOVEMBER 26
-		//JList chatList = new JList(userChatList.getChatListForDisplay());
-		JList chatList = new JList(new String[] {"Chat rooms to be display here"});
-        chatsContainer.add(new JScrollPane(chatList));
+		chatList = new JList(userChatList.getChatListForDisplay());
+		JScrollPane scrollPane = new JScrollPane(chatList);
+		scrollPane.setPreferredSize(new Dimension(200,200));
+		//JList chatList = new JList(new String[] {"Chat rooms to be display here"});
+        chatsContainer.add(scrollPane);
 		chatList.addListSelectionListener(new ChatListSelectionListener());
 		
 		if (owner.getAccessLevel() == 1) {
@@ -147,7 +161,6 @@ public class MainHub extends JFrame{
 		
 		buttonContainer.setLayout(new BoxLayout(buttonContainer, BoxLayout.X_AXIS));
 		buttonContainer.add(itButton);
-		buttonContainer.add(createPrivateChatButton);
 		buttonContainer.add(createGroupChatButton);
 		buttonContainer.add(deleteChatButton);
 		buttonContainer.add(openChatButton);
@@ -159,7 +172,6 @@ public class MainHub extends JFrame{
 		
 		EventListener event = new EventListener();
 		itButton.addActionListener(event);
-		createPrivateChatButton.addActionListener(event);
 		createGroupChatButton.addActionListener(event);
 		deleteChatButton.addActionListener(event);
 		openChatButton.addActionListener(event);
@@ -191,8 +203,6 @@ public class MainHub extends JFrame{
 	    });
 	}
 		
-
-	
 	
 	// BUTTON LISTENERS
 	private class EventListener implements ActionListener {
@@ -201,39 +211,38 @@ public class MainHub extends JFrame{
 			
 			// LOGOUT
 			if (event.getActionCommand().equals("Logout")) {
-				JOptionPane.showMessageDialog(mainFrame, "Placeholder. Logout method will be call here", "Info",
-						JOptionPane.INFORMATION_MESSAGE);
-				Message logout = new Message("");
-				logout.setMessageType(MESSAGETYPE.DISCONNECT);
-				try {
-					msgOut.writeObject(logout);
-					msgOut.flush();
-					closing = true;
-					
-					msgIn.close();
-					msgOut.close();
-					socket.close();
-					
-					Client newClient = new Client();
-					mainFrame.dispose();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				exit();
 			}
 
 			// OPEN CHAT
 			else if (event.getActionCommand().equals("Open Chat")) {
 
 				// open chat method
-				//JOptionPane.showMessageDialog(mainFrame, "Placeholder. Open chat method will be call here", "Info", JOptionPane.INFORMATION_MESSAGE);
-				currentChatRoom = new ChatRoom(msgIn, msgOut, owner); // add arg name for getting chat history
-				mainFrame.setVisible(false);
+				if (roomSelected) {
+					currentChatRoom = new ChatRoom(msgIn, msgOut, owner, selectedChatRoom, MainHub.this); // add arg name for getting chat history
+					mainFrame.setVisible(false);
+				}
+				else
+					JOptionPane.showMessageDialog(mainFrame, "No chat selected! Please choose one first.", "Warning", JOptionPane.ERROR_MESSAGE);
 			}
 			
 			// DELETE CHAT
 			else if (event.getActionCommand().equals("Delete Chat")) {
-				JOptionPane.showMessageDialog(mainFrame, "Placeholder. Delete chat method will be call here", "Info", JOptionPane.INFORMATION_MESSAGE);
-				// TODO: send Message obj to server, with name of chat to be deleted (or exit)
+				if (roomSelected) {
+					Message msg = new Message();
+					msg.setMessageType(MESSAGETYPE.REMOVE_CHAT);
+					try {
+						String stringID = selectedChatRoom.substring(selectedChatRoom.length()-1);
+						int id = Integer.parseInt(stringID);
+						msg.setID(id);
+						msg.setUser(owner);
+					}
+					catch (Exception ex) {
+						ex.printStackTrace();
+					}
+				}
+				else
+					JOptionPane.showMessageDialog(mainFrame, "No chat selected! Please choose one first.", "Warning", JOptionPane.ERROR_MESSAGE);
 			}
 			
 			// CREATE GROUP CHAT
@@ -241,23 +250,68 @@ public class MainHub extends JFrame{
 				// create group chat method
 				JOptionPane.showMessageDialog(mainFrame, "Placeholder. Create group chat method will be call here", "Info", JOptionPane.INFORMATION_MESSAGE);
 				// TODO: send Message obj to server, with name of chat to be created and participant
-			}
-			
-			// CREATE PRIVATE CHAT
-			else if (event.getActionCommand().equals("Create Private Group Chat")) {
-				JOptionPane.showMessageDialog(mainFrame, "Placeholder. Create private group chat method will be call here", "Info", JOptionPane.INFORMATION_MESSAGE);
-				// Would this just be normal group chat but only between two people
+				String chatId = JOptionPane.showInputDialog(mainFrame, "Enter id of new group chat: ", null);
+				if (chatId == null) {
+					return;
+				} 
+				else if (chatId.length() == 0) {
+					JOptionPane.showMessageDialog(mainFrame, "No username entered. Please try again.", "Warning",
+							JOptionPane.ERROR_MESSAGE);
+				}
+				else {
+					Message msg = new Message();
+					msg.setMessageType(MESSAGETYPE.ADD_CHAT);
+					msg.setUser(owner);
+					try {
+						msg.setID(Integer.parseInt(chatId));
+						msgOut.writeObject(msg);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
 			}
 			
 			// OPEN IT BUTTON
 			else if (event.getActionCommand().equals("IT Button")) {
 				// IT Button method
 				//JOptionPane.showMessageDialog(mainFrame, "Placeholder. IT button method will be call here", "Info", JOptionPane.INFORMATION_MESSAGE);
-				AdminPanel adminPanel = new AdminPanel();
+				AdminPanel adminPanel = new AdminPanel(msgOut);
 				// still need IT GUI
 				// delete chat, get all chat history, get all users, create new user credential, delete user credential
 				// logic to be done in Server, just send Message obj of what to do to Server. 
 			}
+		}
+	}
+	
+	public void resetCurrentChatRoom() {
+		currentChatRoom = null;
+		chatList.clearSelection();
+		selectedChatRoom = "";
+		roomSelected = false;
+		
+	}
+	
+	public JFrame getFrame() {
+		return mainFrame;
+	}
+	
+	private void exit() {
+		Message logout = new Message("");
+		logout.setMessageType(MESSAGETYPE.DISCONNECT);
+		try {
+			msgOut.writeObject(logout);
+			msgOut.flush();
+			closing = true;
+			
+			msgIn.close();
+			msgOut.close();
+			socket.close();
+			
+			Client newClient = new Client();
+			mainFrame.dispose();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -268,6 +322,7 @@ public class MainHub extends JFrame{
 	        if (!e.getValueIsAdjusting()) { // Avoid multiple events for the same selection
 	            JList source = (JList) e.getSource();
 	            selectedChatRoom = (String) source.getSelectedValue();
+	            roomSelected = true;
 	        }
 		}
 	}

@@ -1,16 +1,26 @@
 package main.java;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.*;
 
-public class Chat {
+public class Chat implements Serializable{
     private int uniqueID;
     private static int count = 0;
     private List<UserAccount> participants;
+    private String[] members;
     private ConversationHistory history;
     private String name;
     private UserAccount creator;
 
+    // CONSTRUCTOR 
+	public Chat(UserAccount owner, int newUniqueID) {
+		creator = owner;
+		uniqueID = newUniqueID;
+		history = new ConversationHistory(uniqueID);
+		// TEST HERE
+		history.getHistoryFromServer();
+	}
 
 	public Chat(UserAccount owner) {
 		creator = owner;

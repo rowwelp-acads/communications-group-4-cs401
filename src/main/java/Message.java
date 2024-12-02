@@ -40,6 +40,10 @@ public class Message implements Serializable {
 		this.chatID = chatID;
 	}
 	
+	public Message() {
+		
+	}
+	
 	// CONSTRUCTORS
 	// added by Johnny
 	// mostly for debugging for now
@@ -129,8 +133,24 @@ public class Message implements Serializable {
 		return type == MESSAGETYPE.LOGINTOSEND;
 	}
 	
+	public void setID(int id) {
+		chatID = id;
+	}
+	
 	public void setMessageType(MESSAGETYPE type) {
 		this.type = type;
+	}
+	
+	public void setUsername(String newUserName) {
+		username = newUserName;
+	}
+	
+	public void setUser(UserAccount user) {
+		sender = user;
+	}
+	
+	public void setPassword(String newPass) {
+		password = newPass;
 	}
 	
 	// NOVEMBER 28 KA

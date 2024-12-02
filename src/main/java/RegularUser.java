@@ -4,21 +4,21 @@ import java.io.Serializable;
 
 // TODO: Write JUnit tests! @BryanMadrigal
 public class RegularUser extends UserAccount implements Serializable{
-	private static final long serialVersionUID = 2L;
+	private static final long serialVersionUID = 3L;
     // Attributes
     private int accessLevel;
 
     // Constructor
     public RegularUser(String username, String password, String id) {
         // Calls the UserAccount Constructor
-        super(username, password, id);
+    	super(username, password, id);
         this.accessLevel = 1; // Default access level
     } 
 
     // Constructor
     public RegularUser(String username, String password) {
         // Calls the UserAccount Constructor
-        super(username, password);
+    	super(username, password);
         this.accessLevel = 1; // Default access level
     }
 

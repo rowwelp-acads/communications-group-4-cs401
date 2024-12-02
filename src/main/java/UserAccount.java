@@ -17,6 +17,20 @@ public abstract class UserAccount implements Serializable {
     // ADDED NOVEMBER 28 KA
     private ObjectOutputStream out;
     private ObjectInputStream in;
+    
+    public UserAccount(String username, String password, String id) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.chatList = new ChatList(this);
+    }
+    
+    public UserAccount(String username, String password) {
+        this.id = String.valueOf(count++);
+        this.username = username;
+        this.password = password;
+        this.chatList = new ChatList(this);
+    }
 
     // Constructors
     public UserAccount(String username, String password, ObjectOutputStream out, ObjectInputStream in) {
@@ -90,6 +104,15 @@ public abstract class UserAccount implements Serializable {
     
     public static int getCount() {
         return count;
+    }
+    
+    public void addMessage(Message msg) {
+    	int chatID = msg.getChatID();
+    	for (int i = 0; i < chatList.getListOfChats().size(); i++) {
+    		if (chatList.getListOfChats().get(i).getID() == chatID) {
+    			chatList.getListOfChats().get(i).addMessageToHistory(msg);
+    		}
+    	}
     }
     
     /*

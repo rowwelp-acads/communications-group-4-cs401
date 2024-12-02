@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.Set;
 
 public class ITUser extends UserAccount implements Serializable{
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
     private int accessLevel;
     private UserManagement userManagement;
     
     // Constructors
     public ITUser(String username, String password, UserManagement userManagement) {
-        super(username, password);
+    	super(username, password);
         this.accessLevel = 2;
         this.userManagement = userManagement;
     }

@@ -1,6 +1,8 @@
 package main.java;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 
@@ -16,6 +18,7 @@ public class UserManagement implements Serializable{
     // CONSTRUCTOR
     public UserManagement() {
         loadUserCredentials();
+        System.out.println(userList);
     }
 
     private void loadUserCredentials() {
@@ -35,13 +38,11 @@ public class UserManagement implements Serializable{
     	    	}
     	    	// use the "," as the delimitter
     	    	String[] parts = line.split(",");
-    	    
     	    	// Check that the line has 3 parts (We are reading in an account)
     	    	if (parts.length == 3) {
     	    		String username = parts[0];	// username
     	    		String password = parts[1];	// password
     	    		String id = parts[2];		// UniqueID
-
     	    		// Add the credentials to the map
     	    		userCredentials.put(username, password);
 
