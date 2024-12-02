@@ -104,6 +104,10 @@ public class AdminPanel {
 
 	}
 	
+	public void close() {
+		adminFrame.dispose();
+	}
+	
 	private void removeAccount() {
 		Message msg = new Message();
 		msg.setMessageType(MESSAGETYPE.REMOVE_ACCOUNT);
