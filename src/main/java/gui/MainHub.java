@@ -14,6 +14,7 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import main.java.AllRecord;
 import main.java.ChatList;
 import main.java.Client;
 import main.java.ConversationHistory;
@@ -49,6 +50,7 @@ public class MainHub extends JFrame{
 	boolean roomSelected = false;
 	Message msgObject;
 	JList chatList;
+	AllRecord record;
 	
 	// STREAMS
 	Socket socket;
@@ -110,6 +112,10 @@ public class MainHub extends JFrame{
 							
 							if (object instanceof Message) {
 								msgObject = (Message) object;
+							}
+							else if (object instanceof AllRecord) {
+								record = (AllRecord) object;
+								displayRecord();
 							}
 							// check if the chatID matches with user's chat list. Update that chat history
 							// messages if matched.
@@ -295,9 +301,15 @@ public class MainHub extends JFrame{
 		return mainFrame;
 	}
 	
+	private void displayRecord() {
+		JFrame recordFrame = new JFrame();
+		record.getHistories(); // TODO: <- do something. It's a hash-map
+	}
+	
 	private void exit() {
 		Message logout = new Message("");
 		logout.setMessageType(MESSAGETYPE.DISCONNECT);
+		logout.setUsername(owner.getUsername());
 		try {
 			msgOut.writeObject(logout);
 			msgOut.flush();

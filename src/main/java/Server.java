@@ -105,6 +105,12 @@ public class Server {
 		String verificationResult = String.valueOf(verification);
     	return verificationResult;
     }
+    
+    public static boolean clientExist(String username) {
+    	if (clients.get(username) == null)
+    		return false;
+    	return true;
+    }
 
     // Method to add a new client to our map of connected clients
     static void addClient(String id, ClientHandler client) {
@@ -162,6 +168,10 @@ public class Server {
     
     public static void removeAccount(String username) {
     	userDatabase.removeUser(username);
+    }
+    
+    public static Map<Integer, ConversationHistory> getLog(){
+    	return serverLog.getHistories();
     }
     
 }
