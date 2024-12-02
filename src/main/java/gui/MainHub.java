@@ -248,7 +248,6 @@ public class MainHub extends JFrame{
 			// CREATE GROUP CHAT
 			else if (event.getActionCommand().equals("Create Group Chat")) {
 				// create group chat method
-				JOptionPane.showMessageDialog(mainFrame, "Placeholder. Create group chat method will be call here", "Info", JOptionPane.INFORMATION_MESSAGE);
 				// TODO: send Message obj to server, with name of chat to be created and participant
 				String chatId = JOptionPane.showInputDialog(mainFrame, "Enter id of new group chat: ", null);
 				if (chatId == null) {
