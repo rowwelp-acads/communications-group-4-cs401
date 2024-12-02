@@ -181,6 +181,9 @@ public class LogInFrame extends JFrame{
 						*/
 						frame.dispose();
                 	}
+                	else if (serverRespond.getType() == MESSAGETYPE.LOGINTOSEND && serverRespond.getContent().equals("loggedIn")) {
+                		JOptionPane.showMessageDialog(frame, "Error: Log-in failed. User already logged in. Please try again.", "Error", JOptionPane.ERROR_MESSAGE); // if return message is "LoggedIn"
+                	}
                 	else {
                 		JOptionPane.showMessageDialog(frame, "Error: Log-in failed. Please try again.", "Error", JOptionPane.ERROR_MESSAGE); // if return message is "false"
                 	}
