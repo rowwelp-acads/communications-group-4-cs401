@@ -113,19 +113,29 @@ public class Server {
     	return userDatabase.getAccount(username);
     }
     
-    // Method to get the User's Chat List
+    // Method to get user's chat list IDs
     public static List<Integer> getUserChatList(String userID) {
         return chatListManager.getUserChatList(userID);
     }
     
-    // Method to Remove a Chat from the List
+    // Method to add a chat ID to user's list
+    public static void addChatToList(String userID, int chatID) {
+        chatListManager.addChatToList(userID, chatID);
+    }
+    
+    // Method to remove a chat ID from user's list
     public static void removeChatFromList(String userID, int chatID) {
         chatListManager.removeChatFromList(userID, chatID);
     }
-
-    // Method to Add a Chat to the List
-    public static void addChatToList(String userID, int chatID) {
-        chatListManager.addChatToList(userID, chatID);
+    
+    // Gets the ChatListManager instance
+    public static ChatListManager getChatListManager() {
+        return chatListManager;
+    }
+    
+    //get chathistory
+    public static List<String> getChatHistory(int chatID) {
+    	return serverLog.getHistory(chatID).getMessageList();
     }
     
 }

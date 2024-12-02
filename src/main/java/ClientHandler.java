@@ -3,6 +3,7 @@ package main.java;
 import java.io.*; // For input/output operations
 
 import java.net.*; // For network/socket operations
+import java.util.List;
 import java.util.UUID; // For generating unique IDs
 
 // ClientHandler manages each individual client connection
@@ -89,6 +90,43 @@ public class ClientHandler extends Thread {
 						Server.broadcastMessageToClient(objectIn);
 						
 					}
+					
+					// send chat list request
+		            else if (objectIn.getType() == MESSAGETYPE.GET_CHATLIST) {
+		                String userID = objectIn.getContent();  // Get userID from content
+		                
+		                // Get chat IDs from server's ChatListManager
+		                List<Integer> chatIDs = Server.getUserChatList(userID);
+		                
+		                // Create and send response
+		                Message response = new Message(chatIDs, MESSAGETYPE.CHATLIST_RESPONSE);
+		                objectOutputStream.writeObject(response);
+		                objectOutputStream.flush();
+		            }
+					
+					// send chat history request
+		            else if (objectIn.getType() == MESSAGETYPE.GETHISTORY) {
+		                int chatID = objectIn.getChatID(); 
+		                
+		                // Get chat IDs from server's ChatListManager
+		                List<String> chatHistory = Server.getChatHistory(chatID);
+		                
+		                // Create and send response
+		                Message response = new Message(MESSAGETYPE.SENDHISTORY, chatHistory);
+		                objectOutputStream.writeObject(response);
+		                objectOutputStream.flush();
+		            }
+					
+					// send chat creation request
+		            else if (objectIn.getType() == MESSAGETYPE.ADD_CHAT) {
+		                Server.addChatToList(objectIn.getSender().getID(), objectIn.getChatID());
+		            }
+					
+					// send chat removal request
+		            else if (objectIn.getType() == MESSAGETYPE.REMOVE_CHAT) {
+		                Server.removeChatFromList(objectIn.getSender().getID(), objectIn.getChatID());
+		            }
+					
 					// disconnect request
 					else if (objectIn.getType() == MESSAGETYPE.DISCONNECT) {
 						// send disconnect message back to client

@@ -22,6 +22,14 @@ public class Message implements Serializable {
 	private String username;
 	private String password;
 	
+	// Content for ChatList
+	// NOVEMBER 28 KA
+	
+    private List<Integer> chatIDs;
+    
+    // content for chathistory
+    private List<String> chatHistory;
+	
 	// CONSTRUCTORS
 	// Regular Chat Messages
 	public Message(String content, UserAccount sender, int chatID) {
@@ -35,10 +43,10 @@ public class Message implements Serializable {
 	// CONSTRUCTORS
 	// added by Johnny
 	// mostly for debugging for now
-	public Message(String content) {
-		this.content = content;
-		this.timestamp = new Date();
-	}
+//	public Message(String content) {
+//		this.content = content;
+//		this.timestamp = new Date();
+//	}
 	
 	// CONSTRUCTORS
 	// Log In Messages
@@ -49,6 +57,37 @@ public class Message implements Serializable {
 		this.type = MESSAGETYPE.LOGINTOSEND;
 		this.content = "Login Request";
 	}
+	
+	// CONSTRUCTORS
+	// Chat List Request 
+	// NOVEMBER 28 KA
+	public Message(String userID) {
+		this.content = userID;
+		this.timestamp = new Date();
+		this.type = MESSAGETYPE.GET_CHATLIST;
+	}
+	
+	// CONSTRUCTORS
+	// Chat List Response
+	// NOVEMBER 28 KA
+    public Message(List<Integer> chatIDs, MESSAGETYPE type) {
+        this.chatIDs = chatIDs;
+        this.timestamp = new Date();
+        this.type = type;
+    }
+    
+    //constructor
+    //request chat history
+    public Message(int chatID, MESSAGETYPE type) {
+    	this.chatID = chatID;
+    	this.type = type;
+    }
+    
+    //send chat History
+    public Message(MESSAGETYPE type, List<String> history) {
+    	this.type = type;
+    	this.chatHistory = history;
+    }
 	
 	public UserAccount getSender() {
 		return sender;
@@ -94,7 +133,15 @@ public class Message implements Serializable {
 		this.type = type;
 	}
 	
+	// NOVEMBER 28 KA
+    public List<Integer> getChatIDs() {
+        return chatIDs;
+    }
 	
+    // NOVEMBER 29 JH
+    public List<String> getChatHistory() {
+    	return chatHistory;
+    }
 	
 	
 }

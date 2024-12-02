@@ -1,7 +1,6 @@
 package main.java;
 
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.*;
 
 public class Chat {
@@ -11,37 +10,19 @@ public class Chat {
     private ConversationHistory history;
     private String name;
     private UserAccount creator;
-    private List<Message> messages;    // <--- Do we need this line?
 
 
 	public Chat(UserAccount owner) {
 		creator = owner;
-		history = new ConversationHistory();
 		uniqueID = count++;
+		history = new ConversationHistory(uniqueID);
 	}
-	
-	// IF GUI BUTTON PRESSED
-	// ACTIONLISTENER CALLS SENDMESSAGE
-	// Content is taken from the GUI
-	// UserAccount is also taken from the GUI
-	// When you input a message in the text input field, it should contain values for content and UserAccount
-	/*
-	public void sendMessage(String content, UserAccount sender) {
-		Message newMessage = new Message(content, sender, uniqueID);
-		
-        try {
-            serverOutputStream.writeObject(newMessage);
-            serverOutputStream.flush();
-        } catch (IOException e) {
-            System.err.println("Error sending message to server: " + e.getMessage());
-        }
-	}
-	 */
 	
 	// this method is to add the Message to chat history to be displayed in ChatRoom
 	// note current design is sending messages between all clients (even back to sender)
 	public void addMessageToHistory(Message msgObj) {
 		// TODO: add functionality
+		history.addMessage(msgObj);
 	}
 	
 	public UserAccount getOwner() {
@@ -56,40 +37,30 @@ public class Chat {
 		return participants;
 	}
 	
+	public void setID(int ID) {
+		this.uniqueID = ID;
+	}
 	
-	
-	
-	
-	public void addParticipant(String username, Chat chat) {
-		// for (UserAccount participant : participants) {
-           //  if (participant.getUsername().equals(username)) {
-              //   System.out.println("User " + username + " is already a participant.");
-                // return;
-           //  }
+	public Boolean addParticipant(UserAccount user) {
+		for (UserAccount participant : participants) {
+           if (participant.getUsername().equals(user.getUsername())) {
+              System.out.println("User " + user.getUsername() + " is already a participant.");
+                return false; // The method will return false if it cannot add the participant.
+           }
+		}
 		
-		// Implement it here...
-		// Go through participant database
-		// if username == UserAcount.getUsername()
-		// Somehow call server's UserManagement to get the useraccount based on the userID
-		// Use a Message object to send UserAccount over the network? Must somehow find a way 
-		// to pass UserAccount to client or construct a new one based on a Message passed over the network.
+		// Chat does not have a handle to the network, so the chatroom will handle the checking and retrieval of UserAccount from Server.
+		// This method will quite literally just add the checked userAccount.
 		
-		/* Something along these lines...
-		UserAccount user = userManagement.getUserByUsername(username);
-        if (user != null) {
-            // Add the user to the participants list
-            participants.add(user);
-            System.out.println("User " + username + " added to the chat.");
-        } else {
-            System.out.println("User " + username + " does not exist.");
-        }
-		*/
+		participants.add(user); 
+		
+		return true; // The method will return true is the participant was successfully added.
 	}
 		
-	public void removeParticipant(String username) {
-		// Implement it here...
+	public Boolean removeParticipant(String username) {
 		
 	    UserAccount userToRemove = null;
+	    
 	    for (UserAccount user : participants) {
 	        if (user.getUsername().equals(username)) {
 	            userToRemove = user;
@@ -103,59 +74,20 @@ public class Chat {
 	        // Broadcast Message that User has left a chat
 	        String systemMessageContent = username + " has left the chat.";
 	        Message systemMessage = new Message(systemMessageContent, null);
-	        messages.add(systemMessage);
+	        history.addMessage(systemMessage);
 	        
 	        System.out.println("User " + username + " removed from chat.");
+	        return true; // Participant has been found in list and removed. 
 	    } else {
 	        System.out.println("User " + username + " not found in participants.");
+	        return false; // Participant has not been removed.
 	    }
 		
 	}
-
 	
-	public List<Message> loadConversationHistory() {
-		// Implement it here...
-		// String filePath = chatID + ".txt";
-		
-		// For testing:
-		String filePath = "conversationhistory.txt";
-		
-		List<Message> messages = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split("\\|", 3); // Split into at most 3 parts
-                if (parts.length == 3) {
-                    String sender = parts[0];       // First part: sender
-                    String timestamp = parts[1];   // Second part: timestamp
-                    String content = parts[2];     // Third part: full message content
-                    
-                    /*
-                    This might change since right now the only things I have to be saved
-                    in the conversationhistory text file is their username, time and date sent
-                    and the message content.
-                    
-                    When loading the textfile not all userAccount info is stored on there, but
-                    creating a Message requires a userAccount as a "sender". Thus a userAccount
-                    must be created here based on the username stored in the file. I don't really
-                    know how to deal with this entirely yet and I don't want to make major changes
-                    to the way the program works without first consulting the team.
-                     */
-                    
-                    UserAccount senderAccount = new UserAccount(sender, sender, "", "");
-                    
-                    // Create the Message object
-                    Message message = new Message(content, senderAccount);
-                    
-                    messages.add(message);
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return messages;
+	public ConversationHistory getConversationHistory() {
+		return history;
 	}
-
 }
 
 

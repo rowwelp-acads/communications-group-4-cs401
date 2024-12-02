@@ -18,7 +18,7 @@ public class ChatRoom {
 	JFrame chatroomFrame = new JFrame("Chatroom");
 	
 	// hold information of this chat room ? is this needed?
-	Chat thisChatInfo;
+	// Chat thisChatInfo;
 	
 	// A
 	JPanel chatPanel = new JPanel();
@@ -38,15 +38,6 @@ public class ChatRoom {
 	UserAccount user;
 	ConversationHistory convoHistory;
 	
-	String messagesExample[] = {"User 1: Hello!",
-			"User 2: Hello!",
-			"User 1: How are you?",
-			"User 2: I'm good. How about you?",
-			"User 1: I'm doing quite well thanks",
-			"User 1: What are you working on?",
-			"User 2: I'm currently implementing the chatroom GUI.",
-			"User 1: Yikes!"
-	};
 	
 	public ChatRoom(ObjectInputStream in, ObjectOutputStream out, UserAccount user) {
 		this.user = user;
