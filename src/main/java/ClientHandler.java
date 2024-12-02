@@ -83,6 +83,14 @@ public class ClientHandler extends Thread {
 							
 						}
 					}
+					/*
+					else if (objectIn.getType() == MESSAGETYPE.ADD_USER) {
+						Server.addUser(objectIn.getUsername(), objectIn.getPassword());
+					}
+					else if (objectIn.getType() == MESSAGETYPE.REMOVE_USER) {
+						Server.removeUser(objectIn.getUsername());
+					}
+					*/
 					// send message request
 					else if (objectIn.getType() == MESSAGETYPE.MESSAGETOSEND) {
 						// hand message object back to server in order to execute sending to recipient's ClientHandler
@@ -129,14 +137,6 @@ public class ClientHandler extends Thread {
 					
 					// disconnect request
 					else if (objectIn.getType() == MESSAGETYPE.DISCONNECT) {
-						// send disconnect message back to client
-						//Message disconnect = new Message("Disconnecting", objectIn.getSender(), objectIn.getRecipients());
-						//disconnect.setMessageType(MESSAGETYPE.DISCONNECT);
-						//objectOutputStream.writeObject(disconnect);
-						
-						//objectOutputStream.flush();
-						
-						// write chat history and chat list down
 						break;
 					}
 				} catch (Exception e) {
@@ -158,8 +158,9 @@ public class ClientHandler extends Thread {
 			Server.removeClient(clientId);
 			try {
 				// 2. Close the socket connection
-				socket.close();
 				objectOutputStream.close();
+				objectInputStream.close();
+				socket.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

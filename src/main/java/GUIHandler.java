@@ -7,6 +7,7 @@ import main.java.gui.LogInFrame;
 import java.awt.*;    // For additional GUI components
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.Socket;
 
 public class GUIHandler {
     private JFrame loginFrame;    // Window for login
@@ -14,6 +15,7 @@ public class GUIHandler {
     
     // Reference to the client for communication
     private Client client;
+    private Socket serverSocket;
 
     // Constructor - called when a new GUIHandler is created
     public GUIHandler(Client client) {
@@ -23,13 +25,14 @@ public class GUIHandler {
 
     // Creates and shows the login interface
     // passes ObjectStreams along for sending messages
-    public void setupLoginInterface(ObjectInputStream in, ObjectOutputStream out) {
+    public void setupLoginInterface(Socket socket) {
+    	serverSocket = socket;
         /*
         IMPLEMENT:
         1. Create a window (JFrame) for login
         */
     	
-    	LogInFrame logIn = new LogInFrame(in, out);
+    	LogInFrame logIn = new LogInFrame(socket);
     	//logIn.openLoginWindow();
     	
     	

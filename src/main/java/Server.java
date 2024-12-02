@@ -65,6 +65,12 @@ public class Server {
 					try {
 						out.writeObject(message);
 						out.flush();
+						//TODO: add the message to the participant's ConvoHistory
+						// Pseudocode
+						// Server's conversation log handle updating message to a shared list of chats. This is where all userAccount pull their chatHistory from when first log-in.
+						// Johnny can set this up
+						// conversationLog.update(message);
+						
 					} catch (Exception ex) {
 						System.out.println("Error sending msg from Server to Client");
 						ex.printStackTrace();
@@ -72,9 +78,16 @@ public class Server {
 				}
 			}
 			
-			//TODO: add message to their history
 		}
 
+	}
+	
+	public static void addUser(String username, String password) {
+		userDatabase.addUser(username, password);
+	}
+	
+	public static void removeUser(String username) {
+		userDatabase.removeUser(username);
 	}
     
     /*

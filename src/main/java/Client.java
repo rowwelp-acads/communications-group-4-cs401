@@ -59,11 +59,6 @@ public class Client {
     private static final int PORT = 8888;
 
     
-	private InputStream inputStream;
-	private ObjectInputStream objectInputStream;
-	private OutputStream outputStream;
-	private ObjectOutputStream objectOutputStream;
-    
     // Constructor
     public Client() {
         // Create the GUI handler first
@@ -79,7 +74,7 @@ public class Client {
     // Sets up the initial GUI
     private void setupGUI() {
         // Tell the GUI handler to create the login interface
-    	guiHandler.setupLoginInterface(objectInputStream, objectOutputStream);
+    	guiHandler.setupLoginInterface(socket);
     }
 
     // Connects to the server
@@ -90,11 +85,7 @@ public class Client {
             // Create a socket connection to the server
             socket = new Socket(SERVER_IP, 8888);
             
-            // Setup InputStream and OutputStream + ObjectStreams
-    		outputStream = socket.getOutputStream();
-    		objectOutputStream = new ObjectOutputStream(outputStream);
-    		inputStream = socket.getInputStream();
-    		objectInputStream = new ObjectInputStream(inputStream);
+
     		
             // Mark that we're connected
             isConnected = true;

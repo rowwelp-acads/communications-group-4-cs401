@@ -2,15 +2,19 @@ package main.java.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.Socket;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import main.java.ChatList;
+import main.java.Client;
 import main.java.ConversationHistory;
 import main.java.ITUser;
 import main.java.RegularUser;
@@ -29,7 +33,7 @@ import main.java.UserAccount;
  * change boxlayout gridlayout
  *  
  */
-public class MainHub {
+public class MainHub extends JFrame{
 	
 	// GUI PROPERTIES
 	JFrame mainFrame = new JFrame("Main Hub");
@@ -41,8 +45,10 @@ public class MainHub {
 	JButton logoutButton = new JButton("Logout");
 	JPanel buttonContainer = new JPanel();
 	JPanel chatsContainer = new JPanel();
+	boolean closing = false;
 	
 	// STREAMS
+	Socket socket;
 	ObjectInputStream msgIn;
 	ObjectOutputStream msgOut;
 	String selectedChatRoom = "";
@@ -69,7 +75,8 @@ public class MainHub {
 	
 	// MODIFIED NOVEMBER 26 KA
 	// ADDED USER ACCOUNT
-	public MainHub(ObjectInputStream in, ObjectOutputStream out) {
+	public MainHub(Socket newSocket, ObjectInputStream in, ObjectOutputStream out) {
+		socket = newSocket;
 		msgIn = in;
 		msgOut = out;
 		// block process until MainHub receive UserAccount from Server then proceed
@@ -93,7 +100,7 @@ public class MainHub {
 			@Override
 			public void run() {
 				try {
-					while (true) {
+					while (closing == false) {
 						try {
 							Message msgObject = (Message) msgIn.readObject();
 							// check if the chatID matches with user's chat list. Update that chat history
@@ -106,9 +113,13 @@ public class MainHub {
 								System.out.println(msgObject.getContent()); // replace with above once feature implemented
 							});
 						} catch (Exception ex) {
-							System.out.println("Error receiving msg from Server in MainHub. at line 98");
-							ex.printStackTrace();
-							break;
+							if (!closing) {
+								System.out.println("Error receiving msg from Server in MainHub. at line 98");
+								ex.printStackTrace();
+								break;
+							}
+							else
+								break;
 						}
 					}
 				} 
@@ -145,11 +156,6 @@ public class MainHub {
 		mainFrame.setLayout(new BoxLayout(mainFrame.getContentPane(), BoxLayout.Y_AXIS));
 		mainFrame.add(chatsContainer);
 		mainFrame.add(buttonContainer);
-        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mainFrame.pack();
-		mainFrame.setAlwaysOnTop(true);
-		mainFrame.setVisible(true);
-		mainFrame.setLocationRelativeTo(null);
 		
 		EventListener event = new EventListener();
 		itButton.addActionListener(event);
@@ -161,15 +167,32 @@ public class MainHub {
 
 		chatList.addListSelectionListener(new ChatListSelectionListener());
 		
-        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         mainFrame.pack();
 		mainFrame.setAlwaysOnTop(true);
 		mainFrame.setVisible(true);
 		mainFrame.setLocationRelativeTo(null);
+		
+		// Set closing JFrame with X button to be the same as using Logout button
+	    mainFrame.addWindowListener(new WindowAdapter() {
+	        @Override
+	        public void windowClosing(WindowEvent e) {
+	            Message logout = new Message("");
+	            logout.setMessageType(MESSAGETYPE.DISCONNECT);
+	            try {
+	                msgOut.writeObject(logout);
+	                msgOut.flush();
+	                closing = true;
+	                mainFrame.dispose();
+	            } catch (IOException ex) {
+	                ex.printStackTrace();
+	            }
+	        }
+	    });
 	}
 		
 
-		
+	
 	
 	// BUTTON LISTENERS
 	private class EventListener implements ActionListener {
@@ -177,10 +200,27 @@ public class MainHub {
 		public void actionPerformed(ActionEvent event) {
 			
 			// LOGOUT
-			if (event.getActionCommand().equals("logout")){
-				JOptionPane.showMessageDialog(mainFrame, "Placeholder. Logout method will be call here", "Info", JOptionPane.INFORMATION_MESSAGE);
-	            }
-			
+			if (event.getActionCommand().equals("Logout")) {
+				JOptionPane.showMessageDialog(mainFrame, "Placeholder. Logout method will be call here", "Info",
+						JOptionPane.INFORMATION_MESSAGE);
+				Message logout = new Message("");
+				logout.setMessageType(MESSAGETYPE.DISCONNECT);
+				try {
+					msgOut.writeObject(logout);
+					msgOut.flush();
+					closing = true;
+					
+					msgIn.close();
+					msgOut.close();
+					socket.close();
+					
+					Client newClient = new Client();
+					mainFrame.dispose();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+
 			// OPEN CHAT
 			else if (event.getActionCommand().equals("Open Chat")) {
 
@@ -212,7 +252,8 @@ public class MainHub {
 			// OPEN IT BUTTON
 			else if (event.getActionCommand().equals("IT Button")) {
 				// IT Button method
-				JOptionPane.showMessageDialog(mainFrame, "Placeholder. IT button method will be call here", "Info", JOptionPane.INFORMATION_MESSAGE);
+				//JOptionPane.showMessageDialog(mainFrame, "Placeholder. IT button method will be call here", "Info", JOptionPane.INFORMATION_MESSAGE);
+				AdminPanel adminPanel = new AdminPanel();
 				// still need IT GUI
 				// delete chat, get all chat history, get all users, create new user credential, delete user credential
 				// logic to be done in Server, just send Message obj of what to do to Server. 

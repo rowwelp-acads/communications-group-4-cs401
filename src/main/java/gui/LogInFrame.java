@@ -8,11 +8,17 @@ import main.java.Message;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.net.InetAddress;
+import java.net.Socket;
 
-public class LogInFrame {
+public class LogInFrame extends JFrame{
 
     private JFrame frame;
     private JTextField usernameField;
@@ -20,18 +26,34 @@ public class LogInFrame {
     private JButton loginButton;
     private JButton cancelButton;
     
-    private ObjectInputStream msgIn;
+    private Socket socket;
+    private OutputStream out;
     private ObjectOutputStream msgOut;
+    private InputStream in;
+    private ObjectInputStream msgIn;
     private MainHub mainHub;
     
     public LogInFrame() {
     	openLoginWindow();
     }
     
-    public LogInFrame(ObjectInputStream in, ObjectOutputStream out) {
-    	msgIn = in;
-    	msgOut = out;
+    public LogInFrame(Socket socket) {
+    	this.socket = socket;
+    	establishStream();
+   
     	openLoginWindow();
+    }
+    
+    private void establishStream() {
+    	try {
+			out = socket.getOutputStream();
+			msgOut = new ObjectOutputStream(out);
+			
+			in = socket.getInputStream();
+			msgIn = new ObjectInputStream(in);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
     }
     
     public void openLoginWindow() {
@@ -45,6 +67,7 @@ public class LogInFrame {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(500, 550);			// Set the size of the frame on open
         frame.setLocationRelativeTo(null); // Center on screen
+        frame.setVisible(true);
         //System.out.println("Here");
         // Main Panel with BoxLayout
         JPanel mainPanel = new JPanel();
@@ -123,10 +146,38 @@ public class LogInFrame {
                 	Message serverRespond = (Message) msgIn.readObject(); // return message from server
                 	//System.out.println(serverRespond.getContent());
                 	if (serverRespond.getType() == MESSAGETYPE.LOGINTOSEND && serverRespond.getContent().equals("true")) { // check return message
-						mainHub = new MainHub(msgIn, msgOut);
+						mainHub = new MainHub(socket, msgIn, msgOut);
 						mainHub.openMainHub();
-						frame.setVisible(false);
-						//frame.dispose();
+						//frame.setVisible(false);
+						/*
+						mainHub.addWindowListener(new WindowAdapter() {
+							@Override
+							public void windowClosed(WindowEvent e) {
+								try {
+									InetAddress ipAddress = socket.getInetAddress();
+									int port = socket.getPort();
+									
+									msgIn.close();
+									msgOut.close();
+									socket.close();
+									
+									socket = new Socket(ipAddress, port);
+									establishStream();
+									
+									SwingUtilities.invokeLater(()->{
+										System.out.println("test");
+										frame.setVisible(true);
+										frame.toFront();
+									});
+								} catch (IOException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}
+								
+							}
+						});
+						*/
+						frame.dispose();
                 	}
                 	else {
                 		JOptionPane.showMessageDialog(frame, "Error: Log-in failed. Please try again.", "Error", JOptionPane.ERROR_MESSAGE); // if return message is "false"
@@ -155,7 +206,6 @@ public class LogInFrame {
 
         // Add mainpanel to the frame
         frame.add(mainPanel);
-        frame.setVisible(true);
         //System.out.println("Here");
     }
 
