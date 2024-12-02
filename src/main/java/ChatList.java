@@ -23,6 +23,14 @@ public class ChatList implements Serializable {
     private ObjectOutputStream out;
     private ObjectInputStream in;
 
+    public ChatList(UserAccount userAccount) {
+        ID = userAccount.getID();
+        owner = userAccount;
+        listOfChats = new ArrayList<>();
+        // TEST HERE
+        updateListOfChatsServerSide();
+    }
+    
     // CONSTRUCTOR
     public ChatList(UserAccount userAccount, ObjectInputStream in, ObjectOutputStream out) {
         ID = userAccount.getID();
@@ -30,7 +38,9 @@ public class ChatList implements Serializable {
         listOfChats = new ArrayList<>();
         this.out = out;
         this.in = in;
-        updateListOfChats();
+        // TEST HERE
+        updateListOfChatsServerSide();
+        //updateListOfChats();
     }
 
     // METHODS:
@@ -91,10 +101,28 @@ public class ChatList implements Serializable {
         }
         
     }
-
+    
+    public void updateListOfChatsServerSide() {
+    	List<Integer> chatIDs = Server.getUserChatList(ID);
+    	
+    	/////////////////////////////////
+    	
+    	listOfChats.clear();
+        
+        // for every chatID inside the list of chatIDs a userAccount has taken from the Server,
+        for (Integer chatID : chatIDs) {
+        	// Create a new Chat
+            Chat newChat = new Chat(owner, chatID);
+            // Then set the ID of that chat so it gets it's conversation history
+            // newChat.setID(chatID);
+            // Then update this userAccount's listofChats
+            listOfChats.add(newChat);
+        }
+    }
+    /*
+     * TEST HERE
     // 3. Updates the userAccount's listOfChats by grabbing the data from the server
     public void updateListOfChats() {
-        // List<Integer> chatIDs = Server.getUserChatList(ID);
         
     	// SENDING A MESSAGE TO SERVER //
     	
@@ -126,7 +154,7 @@ public class ChatList implements Serializable {
             listOfChats.add(newChat);
         }
     }
-
+	*/
     // 4. 
     public String[] getChatListForDisplay() {
     	// Check if the ChatList belongs to the IT USER
@@ -142,6 +170,15 @@ public class ChatList implements Serializable {
             displayList[i] = "Chat " + listOfChats.get(i).getID();
         }
         return displayList;
+    }
+    
+    public boolean verifyChat(int chatID) {
+    	for (int i = 0; i < listOfChats.size(); i++) {
+    		if (listOfChats.get(i).getID() == chatID) {
+    			return true;
+    		}
+    	}
+    	return false;
     }
     
     

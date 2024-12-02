@@ -1,6 +1,7 @@
 package main.java;
 
 import java.io.IOException;
+
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
@@ -15,7 +16,14 @@ public class ConversationHistory implements Serializable {
 	
 	public ConversationHistory(int id) {
 		this.chatID = id;
+		//Messages = Server.getChatHistory(id); or getHistoryFromServer(); below
+		//Messages = Server.getChatHistory(id);
+		// TEST HERE
 		Messages = new ArrayList<>();
+	}
+	
+	public ConversationHistory(int id, String overloading) {
+		chatID = id;
 	}
 	
 	public ConversationHistory(int id, ObjectInputStream in, ObjectOutputStream out) {
@@ -29,8 +37,12 @@ public class ConversationHistory implements Serializable {
 		return chatID;
 	}
 	
+	public void getHistoryFromServer() {
+		Messages = Server.getChatHistory(chatID);
+	}
+	
 	public void addMessage(Message newMessage) {
-		String message = newMessage.getSender() + "|" + newMessage.getTimestamp() + "|" + newMessage.getContent();
+		String message = newMessage.getTimestamp() + " || " + newMessage.getSender().getUsername() + ": " + newMessage.getContent();
 		Messages.add(message);
 	}
 	
@@ -41,6 +53,7 @@ public class ConversationHistory implements Serializable {
 	public List<String> getMessageList() {
 		return Messages;
 	}
+	
 	
 	//for pre-existing chat
 	public void load(int chatID) {

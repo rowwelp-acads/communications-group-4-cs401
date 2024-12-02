@@ -38,7 +38,37 @@ public class ConversationLog {
 	}
 	
 	public ConversationHistory getHistory(int chatID) {
-		return allHistories.get(chatID);
+		
+		if(allHistories.containsKey(chatID)) {
+			return allHistories.get(chatID);
+		}
+		
+		String chatFile = Integer.toString(chatID);
+		String filename = chatFile.concat(".txt");
+		
+		File openfile = new File(filename);
+		
+		ConversationHistory convoHistory = new ConversationHistory(chatID);
+		
+        try {
+            Scanner scanner = new Scanner(openfile);
+            while (scanner.hasNextLine()) {
+            	String data = scanner.nextLine();
+            	convoHistory.addMessage(data);
+            }
+            
+            scanner.close();
+        } catch (Exception e) {
+        System.out.println(e);
+        }
+        
+        allHistories.put(chatID, convoHistory);
+        //TEST HERE
+         return convoHistory;
+		
+        ///////////////////////
+		
+		//return allHistories.get(chatID);
 	}
 	
 	public boolean doesItExist(int chatID) {
@@ -58,7 +88,7 @@ public class ConversationLog {
 			
 			List<String> history = allHistories.get(chatID).getMessageList();
 			for (int i = 0; i < history.size(); i++) {
-			myWriter.write(history.get(i));
+			myWriter.write(history.get(i) + " \n");
 			}
 			
 			myWriter.close();

@@ -13,24 +13,26 @@ public class Server {
     // Collections.synchronizedMap makes it thread-safe (prevents errors when multiple clients connect/disconnect)
     private static Map<String, ClientHandler> clients = Collections.synchronizedMap(new HashMap<>());
     
-    
-    
-    private static UserManagement userDatabase = new UserManagement();
-    private static ConversationLog serverLog = new ConversationLog("00");
-    
     // Will hold all UserAccount's designated chatList 
     // KA
-    private static List<ChatList> chatList = new ArrayList<>();
+    private static List<ChatList> chatList;
+    // NOVEMBER 25 KA
     private static ChatListManager chatListManager;
+    
+    
+    private static UserManagement userDatabase;
+    private static ConversationLog serverLog;
     
     public static void main(String[] args) {
         try {
+        	chatList = new ArrayList<>();
+        	chatListManager = new ChatListManager();
+        	serverLog = new ConversationLog();
+        	userDatabase = new UserManagement();
             // Create a ServerSocket that listens for client connections on the specified port
             ServerSocket serverSocket = new ServerSocket(PORT);
             System.out.println("Server is running on port " + PORT);
             
-            // NOVEMBER 25 KA
-            chatListManager = new ChatListManager();
             
             // Keep the server running forever
             while (true) {
@@ -52,34 +54,36 @@ public class Server {
     /*
      * method to broadcast messages
      * called in ClientHandler
+     * to be moved into ClientHandler thread if time permits
      */
 	public static void broadcastMessageToClient(Message message) throws IOException {
 		synchronized (clients) {
-			// check for recipients (matching name with String key)
-			// broadcast msg to them only
-			// add msg to their UserAccount chat History
-			List<UserAccount> recipents = message.getParticipants();
-			for (int i = 0; i < clients.size(); i++) {
-				if (clients.get(recipents.get(i).getUsername()) != null) {
-					ObjectOutputStream out = clients.get(recipents.get(i).getUsername()).getOut();
+			// grab chatID from message
+			int chatID = message.getChatID();
+			// iterate through all clientHandler and check their chatList for matching chatID
+			for (Map.Entry<String, ClientHandler> entry : clients.entrySet()) {
+				ClientHandler clientHandler = entry.getValue(); // grab the ClientHandler
+				if (clientHandler.getAccount().getChatList().verifyChat(chatID)) { // check matching ID
 					try {
-						out.writeObject(message);
-						out.flush();
-						//TODO: add the message to the participant's ConvoHistory
-						// Pseudocode
-						// Server's conversation log handle updating message to a shared list of chats. This is where all userAccount pull their chatHistory from when first log-in.
-						// Johnny can set this up
-						// conversationLog.update(message);
-						
-					} catch (Exception ex) {
-						System.out.println("Error sending msg from Server to Client");
+						ObjectOutputStream out = clientHandler.getOut(); // Get the output stream for each client
+						out.writeObject(message); // Send the message to the client
+						out.flush(); // Ensure the message is sent immediately
+						System.out.println("Matching chat found, sending msg");
+						serverLog.addMessageToLog(chatID, message); // add message to log
+
+					} 
+					catch (Exception ex) {
+						System.out.println("Error sending message from Server to Client");
 						ex.printStackTrace();
 					}
 				}
 			}
-			
 		}
 
+	}
+
+	public static void writeHistory(int chatID) {
+		serverLog.write(chatID);
 	}
 	
 	public static void addUser(String username, String password) {
@@ -111,6 +115,7 @@ public class Server {
             System.out.println("Client added. Total clients: " + clients.size());
         }
     }
+   
 
     // Method to remove a client when they disconnect
     static void removeClient(String id) {
@@ -149,6 +154,14 @@ public class Server {
     //get chathistory
     public static List<String> getChatHistory(int chatID) {
     	return serverLog.getHistory(chatID).getMessageList();
+    }
+    
+    public static void addNewAccount(String username, String pass) {
+    	userDatabase.addUser(username, pass);
+    }
+    
+    public static void removeAccount(String username) {
+    	userDatabase.removeUser(username);
     }
     
 }

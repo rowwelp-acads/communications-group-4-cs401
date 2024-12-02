@@ -10,6 +10,7 @@ public class ChatListManager {
     public ChatListManager() {
         chatLists = new HashMap<>();
         loadChatListData();
+        //System.out.println(chatLists);
     }
     
     // Method that loads the chat list data
@@ -18,23 +19,20 @@ public class ChatListManager {
             chatLists.clear();
             BufferedReader reader = new BufferedReader(new FileReader(CHAT_LIST_FILE));
             String line;
-            
             // Loop that goes through each line in the file
         	// Start of the loop
             while ((line = reader.readLine()) != null) {
             	
             	// If the line starts with "ChatListID:" then get the ID
                 if (line.startsWith("ChatListID:")) {
-                    String userID = line.substring(10).trim();  // Get ID after "ChatListID:"
+                    String userID = line.substring(11).trim();  // Get ID after "ChatListID:"
                     // The next line should be the chatIDs
                     String chatIDsLine = reader.readLine();
-                    
                     
                     // If the chatIDs line is NOT empty
                     if (chatIDsLine != null) {
                     	// Create a new List to hold the chatIDs
                         List<Integer> chatIDsList = new ArrayList<>();
-                        
                         // Handle IT User case (ID:1)
                         if (userID.equals("1")) {
                             chatLists.put(userID, chatIDsList);
@@ -61,13 +59,14 @@ public class ChatListManager {
             System.out.println("Loaded chat lists for " + chatLists.size() + " users");					// DEBUG CONSOLE
 
     	} catch (IOException e) {
-    		
+    		e.printStackTrace();
     	}
     }
 
     	
     // Method that returns the ChatList of the specified userID
     public List<Integer> getUserChatList(String userID) {
+    	System.out.println(userID);
     	// If the userID exists in the map, return its list
         // If it doesn't exist, return an empty ArrayList
         return chatLists.getOrDefault(userID, new ArrayList<>());

@@ -91,10 +91,12 @@ public class LogInFrame extends JFrame{
         
         // Create textField for Usernames and Passwords	-	-	-	-	-	-	-
         // Username TextField
+        //usernameField = new JTextField("Rowl");
         usernameField = new JTextField("ituser");
         //usernameField = new JTextField(20);
         usernameField.setMaximumSize(new Dimension(Integer.MAX_VALUE,25));
         // Password TextField
+        //passwordField = new JPasswordField("pass123");
         passwordField = new JPasswordField("ituser123");
         //passwordField = new JPasswordField(20);
         passwordField.setMaximumSize(new Dimension(Integer.MAX_VALUE,25));

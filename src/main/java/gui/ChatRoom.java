@@ -1,6 +1,7 @@
 package main.java.gui;
 
 import java.awt.*;
+
 import java.awt.event.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -13,6 +14,7 @@ import main.java.ConversationHistory;
 import main.java.MESSAGETYPE;
 import main.java.Message;
 import main.java.UserAccount;
+import java.util.List;
 
 public class ChatRoom {
 	JFrame chatroomFrame = new JFrame("Chatroom");
@@ -31,25 +33,39 @@ public class ChatRoom {
 	
 	JButton userListButton = new JButton("Manage Chat...");
 	JButton sendMessageButton = new JButton("Send");
-	
+	int chatID;
 	ObjectInputStream msgIn;
 	ObjectOutputStream msgOut;
-	
+	String[] convoHistoryArray;
 	UserAccount user;
 	ConversationHistory convoHistory;
+	MainHub mainHub;
+	JList<String> messageContainer;
 	
-	
-	public ChatRoom(ObjectInputStream in, ObjectOutputStream out, UserAccount user) {
+	public ChatRoom(ObjectInputStream in, ObjectOutputStream out, UserAccount user, String room, MainHub hub) {
 		this.user = user;
 		msgIn = in;
 		msgOut = out;
-		//thisChatInfo = chatInfo;
+		mainHub = hub;
+		String stringID = room.substring(room.length()-1);
+		try {
+			chatID = Integer.parseInt(stringID);
+			List<String> messageList = this.user.getChatList().getChat(chatID).getConversationHistory().getMessageList();
+			convoHistoryArray = messageList.toArray(new String[0]);
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+		}
 		
+
+		
+		//thisChatInfo = chatInfo;
 		// convoHistory = user.getConversationHistory();
 		// messageList = convoHistory.toString;
-		JList<String> messageList = new JList<>(messagesExample); 
+		
+		messageContainer = new JList<String>(convoHistoryArray);
 		// a
-		JScrollPane messageListScrollPane = new JScrollPane(messageList);
+		JScrollPane messageListScrollPane = new JScrollPane(messageContainer);
 		messageListScrollPane.setPreferredSize(new Dimension(400,300));
 		
 		// Set to scroll to the bottom of the messageList
@@ -61,10 +77,12 @@ public class ChatRoom {
 			JScrollBar verticalBar = messageListScrollPane.getVerticalScrollBar();
             verticalBar.setValue(verticalBar.getMaximum());
 		});
+		
 
 		
 		// Set Layouts
 		chatroomFrame.setLayout(new BoxLayout(chatroomFrame.getContentPane(), BoxLayout.Y_AXIS));
+		chatroomFrame.setPreferredSize(new Dimension(500,400));
 		chatPanel.setLayout(new BoxLayout(chatPanel, BoxLayout.Y_AXIS));
 		messageSendPanel.setLayout(new BorderLayout());
 		
@@ -82,8 +100,8 @@ public class ChatRoom {
 		// get the text field into a message object then send. Should not close msgOut.
 		sendMessageButton.addActionListener(e -> {
 			if (messageField.getText() != null) {
-				Message msg = new Message(messageField.getText());
-				msg.setMessageType(MESSAGETYPE.MESSAGETOSEND);
+				Message msg = new Message(messageField.getText(), user, chatID);
+				messageField.setText("");
 				try {
 					msgOut.writeObject(msg);
 					msgOut.flush();
@@ -110,26 +128,45 @@ public class ChatRoom {
 			dialog.setVisible(true);
 			*/
 			
-			UserList thisChatUserList = new UserList();
-			thisChatUserList.openUserList();
+			UserList thisChatUserList = new UserList(msgOut, chatID);
+			//thisChatUserList.openUserList();
 		});
 		
 		chatroomFrame.add(chatPanel);
 		chatroomFrame.add(optionsPanel);
 		
-		chatroomFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		chatroomFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		chatroomFrame.pack();
 		chatroomFrame.setLocationRelativeTo(null);
 		chatroomFrame.setVisible(true);
 		
+		chatroomFrame.addWindowListener(new WindowAdapter() {
+		    @Override
+		    public void windowClosing(WindowEvent e) {
+		        mainHub.getFrame().setVisible(true); // Show the previous frame
+		        mainHub.resetCurrentChatRoom();
+		        chatroomFrame.dispose(); // Close the current frame
+		    }
+		});
+
 		
+		
+	}
+	
+	public int getChatID() {
+		return chatID;
 	}
 	
 	// update the chatRoom GUI in the background every (1 second?) for new incoming messages. 
 	// Johnny: I'm assuming we are using ConversationHistory to show previous messages in the chat room
 	public void updateChatRoom() {
+		List<String> messageList = this.user.getChatList().getChat(chatID).getConversationHistory().getMessageList();
+		convoHistoryArray = messageList.toArray(new String[0]);
 		// TODO: add functionality
 		// grab the convoHistory belonging to this chat room
+	    SwingUtilities.invokeLater(() -> {
+	        messageContainer.setListData(convoHistoryArray);
+	    });
 	}
 	/*
 	public void openChatroom() {
