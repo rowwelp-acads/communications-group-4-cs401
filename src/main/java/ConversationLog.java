@@ -3,6 +3,7 @@ package main.java;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
-public class ConversationLog {
+public class ConversationLog implements Serializable{
 
 	private Map<Integer, ConversationHistory> allHistories;
 	
@@ -35,6 +36,10 @@ public class ConversationLog {
 		}
 		
 		return logList;
+	}
+	
+	public Map<Integer, ConversationHistory> getHistories() {
+		return allHistories;
 	}
 	
 	public ConversationHistory getHistory(int chatID) {

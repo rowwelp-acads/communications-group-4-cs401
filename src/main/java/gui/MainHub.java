@@ -9,11 +9,13 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Map;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import main.java.AllRecord;
 import main.java.ChatList;
 import main.java.Client;
 import main.java.ConversationHistory;
@@ -49,6 +51,8 @@ public class MainHub extends JFrame{
 	boolean roomSelected = false;
 	Message msgObject;
 	JList chatList;
+	AllRecord record;
+	AdminPanel admin;
 	
 	// STREAMS
 	Socket socket;
@@ -110,6 +114,11 @@ public class MainHub extends JFrame{
 							
 							if (object instanceof Message) {
 								msgObject = (Message) object;
+							}
+							else if (object instanceof AllRecord) {
+								record = (AllRecord) object;
+								displayRecord();
+								continue;
 							}
 							// check if the chatID matches with user's chat list. Update that chat history
 							// messages if matched.
@@ -275,7 +284,7 @@ public class MainHub extends JFrame{
 			else if (event.getActionCommand().equals("IT Button")) {
 				// IT Button method
 				//JOptionPane.showMessageDialog(mainFrame, "Placeholder. IT button method will be call here", "Info", JOptionPane.INFORMATION_MESSAGE);
-				AdminPanel adminPanel = new AdminPanel(msgOut);
+				admin = new AdminPanel(msgOut);
 				// still need IT GUI
 				// delete chat, get all chat history, get all users, create new user credential, delete user credential
 				// logic to be done in Server, just send Message obj of what to do to Server. 
@@ -295,9 +304,48 @@ public class MainHub extends JFrame{
 		return mainFrame;
 	}
 	
+	private void displayRecord() {
+		JFrame recordFrame = new JFrame();
+		
+		Map<Integer, ConversationHistory> histories = record.getHistories(); // TODO: <- do something. It's a hash-map
+		StringBuilder historyList = new StringBuilder();
+		for (Map.Entry<Integer, ConversationHistory> entry : histories.entrySet()) {
+			historyList.append("Chat ").append(entry.getKey()).append(":\n");
+			for (String msg : entry.getValue().getMessageList()) {
+				historyList.append(msg).append("\n");
+			}
+			historyList.append("\n");
+		}
+		
+		JTextArea textArea = new JTextArea();
+        textArea.setEditable(false); // read only
+        textArea.setText(historyList.toString());
+        
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        recordFrame.add(scrollPane);
+        
+		recordFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		recordFrame.setAlwaysOnTop(true);
+        recordFrame.pack();
+		recordFrame.setVisible(true);		
+		recordFrame.setLocationRelativeTo(null);
+		mainFrame.setVisible(false);
+		admin.close();
+		
+	    recordFrame.addWindowListener(new WindowAdapter() {
+	        @Override
+	        public void windowClosing(WindowEvent e) {
+	            mainFrame.setVisible(true);
+	            recordFrame.dispose();
+	        }
+	    });
+		
+	}
+	
 	private void exit() {
 		Message logout = new Message("");
 		logout.setMessageType(MESSAGETYPE.DISCONNECT);
+		logout.setUsername(owner.getUsername());
 		try {
 			msgOut.writeObject(logout);
 			msgOut.flush();
