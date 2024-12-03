@@ -94,10 +94,13 @@ public class ClientHandler extends Thread {
 						}
 					}
 					/*
-					 * else if (objectIn.getType() == MESSAGETYPE.ADD_USER) {
-					 * Server.addUser(objectIn.getUsername(), objectIn.getPassword()); } else if
-					 * (objectIn.getType() == MESSAGETYPE.REMOVE_USER) {
-					 * Server.removeUser(objectIn.getUsername()); }
+					  else if (objectIn.getType() == MESSAGETYPE.ADD_USER) {
+					  Server.addUser(objectIn.getUsername(), objectIn.getPassword()); 
+					  } 
+					 
+					 * else if (objectIn.getType() == MESSAGETYPE.REMOVE_USER) {
+					 * Server.removeUser(objectIn.getUsername()); 
+					 * }
 					 */
 					// send message request
 					else if (objectIn.getType() == MESSAGETYPE.MESSAGETOSEND) {
