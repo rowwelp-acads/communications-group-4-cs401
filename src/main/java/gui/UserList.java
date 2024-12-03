@@ -5,33 +5,48 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.List;
 
 import javax.swing.*;
 
 import main.java.MESSAGETYPE;
 import main.java.Message;
+import main.java.UserAccount;
 
 public class UserList {
-    String[] userListArray = {"Rowwel", "Kai", "Bryan", "John", "Johnny"};
+    String[] userListArray;
+    List<UserAccount> userAccountsList;
+    List<String> participantsList;
 
     JFrame userListFrame = new JFrame("User List");
     JPanel userListPanel = new JPanel();
     JPanel buttonPanel = new JPanel();
+    
+    JList<String> userList;
 
     JButton addUser = new JButton("Add User to Chat");
     JButton removeUser = new JButton("Remove User from Chat");
+    
     int chatID;
+    UserAccount user;
+    
     
     ObjectOutputStream msgOut;
 
-    public UserList(ObjectOutputStream out, int id) {
+    public UserList(ObjectOutputStream out, int id, UserAccount user) {
         // User List Panel
-        JList<String> userList = new JList<>(userListArray);
+    	
+    	// Retrieve list of participants
+    	this.user = user;
+    	this.chatID = id;
+    	
+    	loadParticipants();
+    	
         userListPanel.add(userList);
         userListPanel.setLayout(new GridLayout());
         
         msgOut = out;
-        chatID = id;
+      
 
         // Button Panel
         buttonPanel.add(addUser);
@@ -107,4 +122,19 @@ public class UserList {
         });
     }
     */
+    
+    private void loadParticipants() {
+    	System.out.println(this.chatID);
+    	System.out.println(this.user.getID());
+    	
+    	this.userAccountsList = this.user.getChatList().getChat(this.chatID).getParticipants();
+    	
+    	for(UserAccount participant : userAccountsList) {
+    		participantsList.add(participant.getUsername());
+    	}
+    	
+    	userListArray = participantsList.toArray(new String[0]);
+    	
+    	userList = new JList<String>(userListArray);
+    }
 }
