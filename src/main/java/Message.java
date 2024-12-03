@@ -92,7 +92,15 @@ public class Message implements Serializable {
     	this.type = type;
     	this.chatHistory = history;
     }
+    
+    // Send list of Participants
+    public Message(List<UserAccount> participants, MESSAGETYPE type, int chatID) {
+    	this.type = type;
+    	this.participants = participants;
+    	this.chatID = chatID;
+    }
 	
+    
 	public UserAccount getSender() {
 		return sender;
 	}

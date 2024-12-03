@@ -3,6 +3,7 @@ package main.java;
 import java.io.*; // For input/output operations
 
 import java.net.*; // For network/socket operations
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID; // For generating unique IDs
 /*
@@ -165,6 +166,22 @@ public class ClientHandler extends Thread {
 						Server.removeClient(objectIn.getUsername());
 						System.out.println("User: " + user.getUsername() + " logged out.");
 						break;
+					}
+					// Chat Participants list request
+					else if (objectIn.getType() == MESSAGETYPE.GETPARTICIPANTS ) {
+						int chatID = objectIn.getChatID();
+						List<UserAccount> participants = new ArrayList<>();
+						
+						List<String> participantIDs = Server.getParticipants(chatID);
+						
+						for(String ID: participantIDs) {
+							participants.add(Server.getAccountWithUserIDs(ID));
+						}
+						
+						Message response = new Message(participants, MESSAGETYPE.SENDPARTICIPANTS, chatID);
+						objectOutputStream.writeObject(response);
+						objectOutputStream.flush();
+						
 					}
 				} catch (Exception e) {
 					System.out.println("Server error: ClientHandler message handling");

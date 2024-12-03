@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.List;
 
@@ -30,22 +31,25 @@ public class UserList {
     int chatID;
     UserAccount user;
     
-    
+    ObjectInputStream msgIn;
     ObjectOutputStream msgOut;
 
-    public UserList(ObjectOutputStream out, int id, UserAccount user) {
+    public UserList(ObjectInputStream in, ObjectOutputStream out, int id, UserAccount user) {
         // User List Panel
     	
     	// Retrieve list of participants
     	this.user = user;
     	this.chatID = id;
     	
+    	msgIn = in;
+        msgOut = out;
+    	
     	loadParticipants();
     	
         userListPanel.add(userList);
         userListPanel.setLayout(new GridLayout());
         
-        msgOut = out;
+        
       
 
         // Button Panel
@@ -124,13 +128,12 @@ public class UserList {
     */
     
     private void loadParticipants() {
-    	System.out.println(this.chatID);
-    	System.out.println(this.user.getID());
     	
-    	this.userAccountsList = this.user.getChatList().getChat(this.chatID).getParticipants();
     	
-    	for(UserAccount participant : userAccountsList) {
-    		participantsList.add(participant.getUsername());
+    	userAccountsList = user.getChatList().getChat(chatID).getParticipants();
+    	
+    	for(UserAccount account: userAccountsList) {
+    		participantsList.add(account.getUsername());
     	}
     	
     	userListArray = participantsList.toArray(new String[0]);
