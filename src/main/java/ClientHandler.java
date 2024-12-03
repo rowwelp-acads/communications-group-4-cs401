@@ -108,13 +108,13 @@ public class ClientHandler extends Thread {
 						// ClientHandler
 						// System.out.println(objectIn.getContent());
 						Server.broadcastMessageToClient(objectIn);
-
+						
 					}
 
 					// send chat list request
 					else if (objectIn.getType() == MESSAGETYPE.GET_CHATLIST) {
 						String userID = objectIn.getContent(); // Get userID from content
-						
+
 						// Get chat IDs from server's ChatListManager
 						List<Integer> chatIDs = Server.getUserChatList(userID);
 
@@ -123,7 +123,6 @@ public class ClientHandler extends Thread {
 						objectOutputStream.writeObject(response);
 						objectOutputStream.flush();
 					}
-
 					// send chat history request
 					else if (objectIn.getType() == MESSAGETYPE.GETHISTORY) {
 						int chatID = objectIn.getChatID();
@@ -136,20 +135,21 @@ public class ClientHandler extends Thread {
 						objectOutputStream.writeObject(response);
 						objectOutputStream.flush();
 					}
-
 					// send chat creation request
 					else if (objectIn.getType() == MESSAGETYPE.ADD_CHAT) {
 						Server.addChatToList(objectIn.getSender().getID(), objectIn.getChatID());
 						user = Server.getAccount(objectIn.getUsername());
-
-                        // return UserAccount to user for displaying chats
-                        objectOutputStream.writeObject(user);
-                        objectOutputStream.flush();
+						user.updateList();
+						objectOutputStream.writeObject(user.getChatList());
+						objectOutputStream.flush();
 					}
-
 					// send chat removal request
 					else if (objectIn.getType() == MESSAGETYPE.REMOVE_CHAT) {
 						Server.removeChatFromList(objectIn.getSender().getID(), objectIn.getChatID());
+						user = Server.getAccount(objectIn.getUsername());
+						user.updateList();
+						objectOutputStream.writeObject(user.getChatList());
+						objectOutputStream.flush();
 					} else if (objectIn.getType() == MESSAGETYPE.ADD_ACCOUNT) {
 						Server.addNewAccount(objectIn.getUsername(), objectIn.getPassword());
 					} else if (objectIn.getType() == MESSAGETYPE.REMOVE_ACCOUNT) {
