@@ -178,7 +178,7 @@ public class ClientHandler extends Thread {
 							participants.add(Server.getAccountWithUserIDs(ID));
 						}
 						
-						Message response = new Message(participants, MESSAGETYPE.SENDPARTICIPANTS, "participantsList");
+						Message response = new Message(participants, MESSAGETYPE.SENDPARTICIPANTS, chatID);
 						objectOutputStream.writeObject(response);
 						objectOutputStream.flush();
 						
