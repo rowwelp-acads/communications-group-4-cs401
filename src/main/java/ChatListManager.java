@@ -83,6 +83,10 @@ public class ChatListManager {
             return;
         }
         
+        if (userChats.contains(chatID)) {
+            return;
+        }
+        
         // Add the new chatID to the list
         userChats.add(chatID);
         
