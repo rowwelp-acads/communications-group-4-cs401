@@ -137,6 +137,10 @@ public class Server {
     	return userDatabase.getAccount(username);
     }
     
+    public static UserAccount getAccountWithUserIDs(String userID) {
+    	return userDatabase.getUserAccountWithID(userID);
+    }
+    
     // Method to get user's chat list IDs
     public static List<Integer> getUserChatList(String userID) {
         return chatListManager.getUserChatList(userID);
@@ -172,6 +176,11 @@ public class Server {
     
     public static Map<Integer, ConversationHistory> getLog(){
     	return serverLog.getHistories();
+    }
+    
+    // get participants in Chatlist
+    public static List<String> getParticipants(int chatID) {
+    	return chatListManager.getParticipants(chatID);
     }
     
 }
