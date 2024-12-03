@@ -106,6 +106,7 @@ public class ChatListManager {
         // Now that we removed it, we now update the hashmap
         chatLists.put(userID, userChats);
         
+        System.out.println(chatLists);
         // Then we update the TEXT FILE
         updateFile();
     }

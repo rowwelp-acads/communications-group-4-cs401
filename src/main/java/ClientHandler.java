@@ -105,7 +105,7 @@ public class ClientHandler extends Thread {
 						// ClientHandler
 						// System.out.println(objectIn.getContent());
 						Server.broadcastMessageToClient(objectIn);
-
+						
 					}
 
 					// send chat list request
@@ -143,6 +143,10 @@ public class ClientHandler extends Thread {
 					// send chat removal request
 					else if (objectIn.getType() == MESSAGETYPE.REMOVE_CHAT) {
 						Server.removeChatFromList(objectIn.getSender().getID(), objectIn.getChatID());
+						user = Server.getAccount(objectIn.getUsername());
+						user.updateList();
+						objectOutputStream.writeObject(user.getChatList());
+						objectOutputStream.flush();
 					} else if (objectIn.getType() == MESSAGETYPE.ADD_ACCOUNT) {
 						Server.addNewAccount(objectIn.getUsername(), objectIn.getPassword());
 					} else if (objectIn.getType() == MESSAGETYPE.REMOVE_ACCOUNT) {

@@ -252,6 +252,8 @@ public class MainHub extends JFrame{
 						int id = Integer.parseInt(stringID);
 						msg.setID(id);
 						msg.setUser(owner);
+						msgOut.writeObject(msg);
+						msgOut.flush();
 					}
 					catch (Exception ex) {
 						ex.printStackTrace();
@@ -285,10 +287,7 @@ public class MainHub extends JFrame{
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					
-					
-					
-					
+
 				}
 			}
 			
