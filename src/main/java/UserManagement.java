@@ -99,6 +99,15 @@ public class UserManagement implements Serializable{
     	}
     	return userList.get(userAccountIndex);
     }
+    
+    public UserAccount getUserAccountWithID(String ID) {
+    	for(UserAccount user : userList) {
+    		if (user.getID().equals(ID)) {
+    			return user;
+    		}
+    	}
+    	return null; // if none found
+    }
 
     public boolean addUser(String username, String password) {
         // Check if user already exists
