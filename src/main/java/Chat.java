@@ -43,7 +43,7 @@ public class Chat implements Serializable{
 		return uniqueID;
 	}
 	
-	public List<UserAccount> getParticipants(){
+	public List<UserAccount> getParticipants() {
 		return participants;
 	}
 	
@@ -58,9 +58,6 @@ public class Chat implements Serializable{
                 return false; // The method will return false if it cannot add the participant.
            }
 		}
-		
-		// Chat does not have a handle to the network, so the chatroom will handle the checking and retrieval of UserAccount from Server.
-		// This method will quite literally just add the checked userAccount.
 		
 		participants.add(user); 
 		
