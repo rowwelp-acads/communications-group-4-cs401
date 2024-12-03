@@ -6,7 +6,7 @@ import java.nio.file.Paths;
 import java.util.*;
 
 
-public class UserManagement implements Serializable{
+public class UserManagement {
     // File path for storing user credentials
     private static final String USER_FILE = "src/main/java/useraccounts.txt";
     
@@ -65,14 +65,6 @@ public class UserManagement implements Serializable{
     	    e.printStackTrace();
     	}
 }
-    
-    public void setupChatLists() {
-        System.out.println("\nSetting up ChatLists for users...");
-        for (UserAccount user : userList) {
-            System.out.println("Processing user: " + user.getUsername());
-            //user.setChatList(); // Ensure each user initializes their ChatList
-            System.out.println("ChatList created for user: " + user.getUsername());}
-        } 
 
     
     public boolean verifyCredentials(String username, String password) {
@@ -88,6 +80,7 @@ public class UserManagement implements Serializable{
         }
         return null;  // Return null if no matching user is found
     }
+
     
     public UserAccount getAccount(String username) {
     	int userAccountIndex = 0;
@@ -109,6 +102,7 @@ public class UserManagement implements Serializable{
     	return null; // if none found
     }
 
+
     public boolean addUser(String username, String password) {
         // Check if user already exists
         if (userCredentials.containsKey(username)) {
@@ -121,11 +115,9 @@ public class UserManagement implements Serializable{
         
         // Append new user to file with ID and add to HashMap
         try (FileWriter writer = new FileWriter(USER_FILE, true)) {
-            rewriteUserFile();
-        	// writer.write(username + "," + password + "," + newUser.getID() + "\n");
-            // writer.write(String.valueOf(UserAccount.getCount()) + "\n");  // Write the updated count
+            writer.write(username + "," + password + "," + newUser.getID() + "\n");
+            writer.write(String.valueOf(UserAccount.getCount()) + "\n");  // Write the updated count
             userCredentials.put(username, password);
-            
             return true;
         } catch (IOException e) {
             System.err.println("Error adding user: " + e.getMessage());
@@ -160,27 +152,30 @@ public class UserManagement implements Serializable{
     }
     
 
-    // Helper method that rewrites the entire user credentials file
-    // Used after removing a user to ensure file matches memory state
+//    // Helper method that rewrites the entire user credentials file
+//    // Used after removing a user to ensure file matches memory state
+//    private void rewriteUserFile() throws IOException {
+//        try (BufferedWriter writer = new BufferedWriter(new FileWriter(USER_FILE))) {
+//            for (Map.Entry<String, String> entry : userCredentials.entrySet()) {
+//                writer.write(entry.getKey() + "," + entry.getValue());
+//                writer.newLine();
+//            }
+//        }
+//    }
+    
     private void rewriteUserFile() throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(USER_FILE))) {
-            /*
-        	for (Map.Entry<String, String> entry : userCredentials.entrySet()) {
-                writer.write(entry.getKey() + "," + entry.getValue());
-                
+            // Write each user account with their ID
+            for (UserAccount user : userList) {
+                writer.write(user.getUsername() + "," + 
+                            user.getPassword() + "," + 
+                            user.getID());
                 writer.newLine();
             }
-            */
-        	
-        	for(UserAccount user : userList) {
-        		writer.write(user.getUsername() + "," +
-        				user.getPassword() + "," +
-        				user.getID());
-        		writer.newLine();
-        	}
             
-        	writer.write(String.valueOf(UserAccount.getCount()));
-        	writer.newLine();
+            // Write the current count as the last line
+            writer.write(String.valueOf(UserAccount.getCount()));
+            writer.newLine();
         }
     }
     
