@@ -94,10 +94,13 @@ public class ClientHandler extends Thread {
 						}
 					}
 					/*
-					 * else if (objectIn.getType() == MESSAGETYPE.ADD_USER) {
-					 * Server.addUser(objectIn.getUsername(), objectIn.getPassword()); } else if
-					 * (objectIn.getType() == MESSAGETYPE.REMOVE_USER) {
-					 * Server.removeUser(objectIn.getUsername()); }
+					  else if (objectIn.getType() == MESSAGETYPE.ADD_USER) {
+					  Server.addUser(objectIn.getUsername(), objectIn.getPassword()); 
+					  } 
+					 
+					 * else if (objectIn.getType() == MESSAGETYPE.REMOVE_USER) {
+					 * Server.removeUser(objectIn.getUsername()); 
+					 * }
 					 */
 					// send message request
 					else if (objectIn.getType() == MESSAGETYPE.MESSAGETOSEND) {
@@ -158,10 +161,8 @@ public class ClientHandler extends Thread {
 					}
 					// disconnect request
 					else if (objectIn.getType() == MESSAGETYPE.DISCONNECT) {
-						for (int i = 0; i < user.getChatList().getListOfChats().size(); i++) {
-							Server.writeHistory(user.getChatList().getListOfChats().get(i).getID());
-							Server.removeClient(objectIn.getUsername());
-						}
+						
+						Server.removeClient(objectIn.getUsername());
 						System.out.println("User: " + user.getUsername() + " logged out.");
 						break;
 					}

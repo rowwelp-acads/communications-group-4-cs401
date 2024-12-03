@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -41,7 +42,7 @@ public class LogInFrame extends JFrame{
     	this.socket = socket;
     	establishStream();
    
-    	openLoginWindow();
+    	openLoginWindow(); 
     }
     
     private void establishStream() {
@@ -76,6 +77,87 @@ public class LogInFrame extends JFrame{
         mainPanel.setBorder(new EmptyBorder(20, 20, 20, 20));			// Set the border of the panels inside of the mainPanel
         frame.setMaximumSize(new Dimension(Integer.MAX_VALUE,600));		//Set the max size of the Panel
 
+//     // Loads img buttons into the Jframe that will stored inside of a JscrollPane
+//    private void loadImgButtons(final JPanel imgPanel) {
+//    		// Elements of the new Panel
+//    		String imgPath;
+//    		JPanel imagePanel = imgPanel;
+//
+//    		// Load images into the jFrame
+//    		for (int i = 0; i < dvdNames.size(); i++) {
+//    			
+//    			String dvdName = dvdNames.get(i);	
+//    			String dvdRating = dvdRatings.get(i);
+//    			String dvdRuntime = dvdRuntimes.get(i);
+//    			imgPath = dvdNames.get(i) + ".jpg";
+//
+//    			// Create a File Object so we can make sure that the image file exists in the root dir.
+//    			File imgFile = new File(imgPath);
+//    			
+//    			// If the file does not exist, we link the dvd to any of the default images available. 
+//    			if (!imgFile.exists()) {
+//    				imgPath = "unkownRating.jpg";
+//    			}
+//
+//    			// Create the Content that will be stored inside of the imagePanel.
+//    			// Load the image from the file path.
+//    			ImageIcon dvdImgIcon = new ImageIcon(imgPath);
+//    			// Get the image from the icon.
+//    			Image dvdImg = dvdImgIcon.getImage();
+//    			//Scale the image (ENSURES ALL IMAGES ARE THE SAME SIZE)
+//    			dvdImg = dvdImg.getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+//    			// Create a new ImageIcon with the scaled image
+//    			ImageIcon scaledImg = new ImageIcon(dvdImg);
+//    			
+//    			//Create the Content that will be placed inside of the imagePanel
+//    			JLabel imageLabel = new JLabel(scaledImg);					// Will allow us to make the image a button
+//    			JLabel imageName = new JLabel(dvdName);						// Will be placed beside the image
+//    			//Place the imageLabel inside of a JButton
+//    			JButton imgButton = new JButton(imageLabel.getIcon());		// Puts the imageLabel inside of the imgButton JButton 
+//    			
+//    			
+//
+//    			imgButton.addActionListener(new ActionListener() {
+//    				public void actionPerformed(ActionEvent e) {
+//    					// Creating new Frame
+//    					JFrame DVDContentFrame = new JFrame(dvdName);
+//    					DVDContentFrame.setSize(300, 300);
+//    					DVDContentFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+//    					DVDContentFrame.setLocationRelativeTo(imgPanel); // Center on screen
+//    					
+//    					// Create new File Panel
+//    					JPanel FilePanel = new JPanel();
+//    					FilePanel.setLayout(new GridLayout(0, 1));
+//
+//    					// Create Content for the Panel
+//    					JLabel title = new JLabel("Title: " + dvdName);
+//    					JLabel rating = new JLabel("Rating: " + dvdRating);
+//    					JLabel runtime = new JLabel("Runtime: " + dvdRuntime);// + "minutes");
+//    					
+//    					/*
+//    					 * Any Buttons to modify the Current DVD must be placed here 
+//    					 * Followed by actionListeners for those Buttons (with enough time)
+//    					 */
+//
+//    					// Add the content to the FilePanel.
+//    					FilePanel.add(title);
+//    					FilePanel.add(rating);
+//    					FilePanel.add(runtime);
+//
+//    					// Add the Panel to the Content Frame.
+//    					DVDContentFrame.add(FilePanel);
+//    					DVDContentFrame.setVisible(true);
+//    				}
+//
+//    			});
+//    			//Add the components to the imagePanel
+//    			imagePanel.add(imgButton);
+//    			imagePanel.add(imageName);
+//    		}
+//    	}
+        
+        
+        
         /*
          * Input Panel:
          * Holds 2 sub-panels usernameSubPanel & passwordSubPanel. 
@@ -102,6 +184,16 @@ public class LogInFrame extends JFrame{
         passwordField.setMaximumSize(new Dimension(Integer.MAX_VALUE,25));
         
         // Create SubPanels to hold the Lables and textFields
+        JPanel img = new JPanel();
+        String imgPath = "comcom.png";
+        File imgFile = new File(imgPath);
+        ImageIcon dvdImgIcon = new ImageIcon(imgPath);
+        Image dvdImg = dvdImgIcon.getImage();
+        dvdImg = dvdImg.getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+        ImageIcon scaledImg = new ImageIcon(dvdImg);
+        img.add(new JLabel(scaledImg));
+        
+        
         // Username SubPanel
         JPanel usernameSubPanel = new JPanel();
         usernameSubPanel.setLayout(new BoxLayout(usernameSubPanel, BoxLayout.Y_AXIS));
@@ -118,6 +210,7 @@ public class LogInFrame extends JFrame{
         passwordSubPanel.add(passwordField);
         
         // Add the SubPanels to the inputPanel
+        inputPanel.add(img);
         inputPanel.add(usernameSubPanel);
         inputPanel.add(passwordSubPanel);
 
