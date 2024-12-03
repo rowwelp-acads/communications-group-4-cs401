@@ -18,6 +18,7 @@ public class Chat implements Serializable{
 		creator = owner;
 		uniqueID = newUniqueID;
 		history = new ConversationHistory(uniqueID);
+		participants = new ArrayList<>();
 		// TEST HERE
 		history.getHistoryFromServer();
 	}
