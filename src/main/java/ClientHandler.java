@@ -158,10 +158,8 @@ public class ClientHandler extends Thread {
 					}
 					// disconnect request
 					else if (objectIn.getType() == MESSAGETYPE.DISCONNECT) {
-						for (int i = 0; i < user.getChatList().getListOfChats().size(); i++) {
-							Server.writeHistory(user.getChatList().getListOfChats().get(i).getID());
-							Server.removeClient(objectIn.getUsername());
-						}
+						
+						Server.removeClient(objectIn.getUsername());
 						System.out.println("User: " + user.getUsername() + " logged out.");
 						break;
 					}
