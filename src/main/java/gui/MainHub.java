@@ -123,13 +123,18 @@ public class MainHub extends JFrame{
 							else if(object instanceof UserAccount) {
 								owner = (UserAccount) object;
 								userChatList = owner.getChatList();
+								chatList = new JList(userChatList.getChatListForDisplay());
 								
 							}
 							// check if the chatID matches with user's chat list. Update that chat history
 							// messages if matched.
 							SwingUtilities.invokeLater(() -> {
 								// add the message to convoHistory
-								owner.addMessage(msgObject);
+								
+								if(msgObject != null) {
+									owner.addMessage(msgObject);
+								}
+								
 								
 								// if the message also belong to the current active chat room, update its GUI to display the new history
 								if (currentChatRoom != null && msgObject.getChatID() == currentChatRoom.getChatID()) {
