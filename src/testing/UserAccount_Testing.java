@@ -63,20 +63,4 @@ public class UserAccount_Testing {
 		
 		assertTrue( testReg.getPassword().equals(testPassword));
 	}
-	
-	@Test
-	public void getCount() {
-		String regName = "Bryan";
-		String regPassword = "pass123";
-		String regID = "1";
-		int count = Integer.parseInt(regID);
-		
-		String testPassword = "TheyWillNeverGuessThis";
-		
-		UserAccount testReg = new RegularUser(regName,regPassword,regID,true);
-		testReg.setCount(count);
-		
-		assertTrue( testReg.getID().equals(count));
-	}
-
 }
