@@ -112,9 +112,11 @@ public class UserManagement implements Serializable{
         
         // Append new user to file with ID and add to HashMap
         try (FileWriter writer = new FileWriter(USER_FILE, true)) {
-            writer.write(username + "," + password + "," + newUser.getID() + "\n");
-            writer.write(String.valueOf(UserAccount.getCount()) + "\n");  // Write the updated count
+            rewriteUserFile();
+        	// writer.write(username + "," + password + "," + newUser.getID() + "\n");
+            // writer.write(String.valueOf(UserAccount.getCount()) + "\n");  // Write the updated count
             userCredentials.put(username, password);
+            
             return true;
         } catch (IOException e) {
             System.err.println("Error adding user: " + e.getMessage());
@@ -153,10 +155,23 @@ public class UserManagement implements Serializable{
     // Used after removing a user to ensure file matches memory state
     private void rewriteUserFile() throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(USER_FILE))) {
-            for (Map.Entry<String, String> entry : userCredentials.entrySet()) {
+            /*
+        	for (Map.Entry<String, String> entry : userCredentials.entrySet()) {
                 writer.write(entry.getKey() + "," + entry.getValue());
+                
                 writer.newLine();
             }
+            */
+        	
+        	for(UserAccount user : userList) {
+        		writer.write(user.getUsername() + "," +
+        				user.getPassword() + "," +
+        				user.getID());
+        		writer.newLine();
+        	}
+            
+        	writer.write(String.valueOf(UserAccount.getCount()));
+        	writer.newLine();
         }
     }
     

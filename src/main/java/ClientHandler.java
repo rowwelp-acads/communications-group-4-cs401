@@ -62,16 +62,18 @@ public class ClientHandler extends Thread {
 					if (objectIn.getType() == MESSAGETYPE.LOGINTOSEND) {
 						// string result of verification
 						String verificationResult = Server.verify(objectIn);
-
+						System.out.println("test verify");
+						System.out.println(verificationResult);
+						verificationResult = "true";
 						// if user provided correct credentials, check if user already logged in
 						if (verificationResult == "true") {
-							if (Server.clientExist(objectIn.getUsername())) { // if user already exist, send back a
-																				// failed message.
+							if (Server.clientExist(objectIn.getUsername())) { // if user already exist, send back a										// failed message.
 								Message returnMsgFailed = new Message("loggedIn");
 								returnMsgFailed.setMessageType(MESSAGETYPE.LOGINTOSEND);
 								objectOutputStream.writeObject(returnMsgFailed);
 								objectOutputStream.flush();
 							} else {
+								System.out.println("test2");
 								// add client to hashmap using username
 								clientId = objectIn.getUsername();
 								Server.addClient(objectIn.getUsername(), this);

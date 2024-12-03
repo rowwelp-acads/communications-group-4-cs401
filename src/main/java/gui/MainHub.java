@@ -307,8 +307,11 @@ public class MainHub extends JFrame{
 	private void displayRecord() {
 		JFrame recordFrame = new JFrame();
 		
-		Map<Integer, ConversationHistory> histories = record.getHistories(); // TODO: <- do something. It's a hash-map
+		// grab the history has-map
+		Map<Integer, ConversationHistory> histories = record.getHistories();
+		// StringBuilder to store all the history as String
 		StringBuilder historyList = new StringBuilder();
+		// iterate through all key, then append the key as chatID then append its history
 		for (Map.Entry<Integer, ConversationHistory> entry : histories.entrySet()) {
 			historyList.append("Chat ").append(entry.getKey()).append(":\n");
 			for (String msg : entry.getValue().getMessageList()) {
@@ -317,10 +320,10 @@ public class MainHub extends JFrame{
 			historyList.append("\n");
 		}
 		
+		// display the StringBuilder
 		JTextArea textArea = new JTextArea();
         textArea.setEditable(false); // read only
         textArea.setText(historyList.toString());
-        
         JScrollPane scrollPane = new JScrollPane(textArea);
         recordFrame.add(scrollPane);
         
@@ -332,6 +335,7 @@ public class MainHub extends JFrame{
 		mainFrame.setVisible(false);
 		admin.close();
 		
+		// Closing handling
 	    recordFrame.addWindowListener(new WindowAdapter() {
 	        @Override
 	        public void windowClosing(WindowEvent e) {
