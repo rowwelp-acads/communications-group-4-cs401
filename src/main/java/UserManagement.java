@@ -81,6 +81,28 @@ public class UserManagement {
         return null;  // Return null if no matching user is found
     }
 
+    
+    public UserAccount getAccount(String username) {
+    	int userAccountIndex = 0;
+    	for (int i = 0; i < userList.size(); i++) {
+    		if (userList.get(i).getUsername().equals(username)) {
+    			userAccountIndex = i;
+    			break;
+    		}
+    	}
+    	return userList.get(userAccountIndex);
+    }
+    
+    public UserAccount getUserAccountWithID(String ID) {
+    	for(UserAccount user : userList) {
+    		if (user.getID().equals(ID)) {
+    			return user;
+    		}
+    	}
+    	return null; // if none found
+    }
+
+
     public boolean addUser(String username, String password) {
         // Check if user already exists
         if (userCredentials.containsKey(username)) {

@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.*;
@@ -116,6 +117,19 @@ public class MainHub extends JFrame{
 							
 							if (object instanceof Message) {
 								msgObject = (Message) object;
+								
+								if(msgObject.getType() == MESSAGETYPE.SENDPARTICIPANTS ) {
+									System.out.println("Participants requested from server and arrived to client, chat ID " + msgObject.getChatID());
+									List<UserAccount> participants;
+									participants = msgObject.getParticipants();
+									
+									System.out.println(msgObject.getChatID());
+									
+									for(UserAccount participant : participants) {
+										userChatList.getChat(msgObject.getChatID()).addParticipant(participant);
+									}
+									continue;
+								}
 							}
 							else if (object instanceof AllRecord) {
 								record = (AllRecord) object;

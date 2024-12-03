@@ -128,7 +128,7 @@ public class ChatRoom {
 			dialog.setVisible(true);
 			*/
 			
-			UserList thisChatUserList = new UserList(msgOut, chatID, this.user);
+			UserList thisChatUserList = new UserList(msgIn, msgOut, chatID, this.user);
 			//thisChatUserList.openUserList();
 		});
 		

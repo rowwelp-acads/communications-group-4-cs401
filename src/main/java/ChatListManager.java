@@ -111,6 +111,23 @@ public class ChatListManager {
         updateFile();
     }
     
+    // Method that extracts and returns a list of the User ID's that 
+    // have a value equal to the given chatID
+    public List<String> getParticipants(int chatID) {
+    	List<String> participantIDs = new ArrayList<>();
+    	
+    	for(Map.Entry<String, List<Integer>> chatList : chatLists.entrySet()) {
+    		List<Integer> chatIDsOfUser = chatList.getValue();
+    		for(Integer ID : chatIDsOfUser) {
+    			if(chatID == ID) {
+    				participantIDs.add(chatList.getKey());
+    			}
+    		}
+    	}
+    	
+    	return participantIDs;
+    }
+    
     
     // Method that updates the TEXT FILE
     private void updateFile() {
