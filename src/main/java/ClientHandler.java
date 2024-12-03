@@ -92,6 +92,13 @@ public class ClientHandler extends Thread {
 								objectOutputStream.flush();
 							}
 
+						} else {
+							
+							Message returnMsgFailed = new Message("false");
+							returnMsgFailed.setMessageType(MESSAGETYPE.LOGINTOSEND);
+							objectOutputStream.writeObject(returnMsgFailed);
+							objectOutputStream.flush();
+							
 						}
 					}
 					/*

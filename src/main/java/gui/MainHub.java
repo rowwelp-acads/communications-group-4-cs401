@@ -196,7 +196,7 @@ public class MainHub extends JFrame{
 		buttonContainer.setLayout(new BoxLayout(buttonContainer, BoxLayout.X_AXIS));
 		buttonContainer.add(itButton);
 		buttonContainer.add(createGroupChatButton);
-		buttonContainer.add(deleteChatButton);
+	
 		buttonContainer.add(openChatButton);
 		buttonContainer.add(logoutButton);
 		

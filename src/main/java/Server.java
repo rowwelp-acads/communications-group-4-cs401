@@ -70,7 +70,6 @@ public class Server {
 						out.flush(); // Ensure the message is sent immediately
 						System.out.println("Matching chat found, sending msg");
 						serverLog.addMessageToLog(chatID, message); // add message to log
-						serverLog.write(chatID);
 					} 
 					catch (Exception ex) {
 						System.out.println("Error sending message from Server to Client");
