@@ -6,7 +6,8 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 
 @Suite.SuiteClasses({
-	UserAccount_Testing.class
+	UserAccount_Testing.class,
+	ConvoLogTest.class
 })
 
 public class AllTests {
