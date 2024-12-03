@@ -12,8 +12,18 @@ public class RegularUser extends UserAccount implements Serializable{
     public RegularUser(String username, String password, String id) {
         // Calls the UserAccount Constructor
     	super(username, password, id);
+    	
         this.accessLevel = 1; // Default access level
     } 
+    
+    public RegularUser(String username, String password, String id, boolean test) {
+    	setUsername(username);
+    	setPassword(password);
+    	setUserId(id);
+    	
+        this.accessLevel = 1; // Default access level
+    } 
+    
 
     // Constructor
     public RegularUser(String username, String password) {
