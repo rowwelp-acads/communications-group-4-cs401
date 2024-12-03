@@ -50,9 +50,10 @@ public class MainHub extends JFrame{
 	boolean closing = false;
 	boolean roomSelected = false;
 	Message msgObject;
-	JList chatList;
+	JList<String> chatList = new JList();
 	AllRecord record;
 	AdminPanel admin;
+	JScrollPane scrollPane;
 	
 	// STREAMS
 	Socket socket;
@@ -120,10 +121,11 @@ public class MainHub extends JFrame{
 								displayRecord();
 								continue;
 							}
-							else if(object instanceof UserAccount) {
-								owner = (UserAccount) object;
+							else if (object instanceof ChatList) {
+								ChatList chat = (ChatList) object;
+								owner.setList(chat);
 								userChatList = owner.getChatList();
-								
+								chatList.setListData(userChatList.getChatListForDisplay());
 							}
 							// check if the chatID matches with user's chat list. Update that chat history
 							// messages if matched.
@@ -163,7 +165,7 @@ public class MainHub extends JFrame{
 		// CHAT LIST
 		// MODIFIED NOVEMBER 26
 		chatList = new JList(userChatList.getChatListForDisplay());
-		JScrollPane scrollPane = new JScrollPane(chatList);
+		scrollPane = new JScrollPane(chatList);
 		scrollPane.setPreferredSize(new Dimension(200,200));
 		//JList chatList = new JList(new String[] {"Chat rooms to be display here"});
         chatsContainer.add(scrollPane);
@@ -274,6 +276,7 @@ public class MainHub extends JFrame{
 				else {
 					Message msg = new Message();
 					msg.setMessageType(MESSAGETYPE.ADD_CHAT);
+					msg.setUsername(owner.getUsername());
 					msg.setUser(owner);
 					try {
 						msg.setID(Integer.parseInt(chatId));

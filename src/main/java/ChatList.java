@@ -102,8 +102,13 @@ public class ChatList implements Serializable {
         
     }
     
+    public int getSize() {
+    	return listOfChats.size();
+    }
+    
     public void updateListOfChatsServerSide() {
     	List<Integer> chatIDs = Server.getUserChatList(ID);
+    	System.out.println(chatIDs);
     	
     	/////////////////////////////////
     	

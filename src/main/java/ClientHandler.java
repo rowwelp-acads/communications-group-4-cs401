@@ -62,18 +62,16 @@ public class ClientHandler extends Thread {
 					if (objectIn.getType() == MESSAGETYPE.LOGINTOSEND) {
 						// string result of verification
 						String verificationResult = Server.verify(objectIn);
-						System.out.println("test verify");
-						System.out.println(verificationResult);
-						verificationResult = "true";
+
 						// if user provided correct credentials, check if user already logged in
 						if (verificationResult == "true") {
-							if (Server.clientExist(objectIn.getUsername())) { // if user already exist, send back a										// failed message.
+							if (Server.clientExist(objectIn.getUsername())) { // if user already exist, send back a
+																				// failed message.
 								Message returnMsgFailed = new Message("loggedIn");
 								returnMsgFailed.setMessageType(MESSAGETYPE.LOGINTOSEND);
 								objectOutputStream.writeObject(returnMsgFailed);
 								objectOutputStream.flush();
 							} else {
-								System.out.println("test2");
 								// add client to hashmap using username
 								clientId = objectIn.getUsername();
 								Server.addClient(objectIn.getUsername(), this);
@@ -113,7 +111,7 @@ public class ClientHandler extends Thread {
 					// send chat list request
 					else if (objectIn.getType() == MESSAGETYPE.GET_CHATLIST) {
 						String userID = objectIn.getContent(); // Get userID from content
-						
+
 						// Get chat IDs from server's ChatListManager
 						List<Integer> chatIDs = Server.getUserChatList(userID);
 
@@ -122,7 +120,6 @@ public class ClientHandler extends Thread {
 						objectOutputStream.writeObject(response);
 						objectOutputStream.flush();
 					}
-
 					// send chat history request
 					else if (objectIn.getType() == MESSAGETYPE.GETHISTORY) {
 						int chatID = objectIn.getChatID();
@@ -135,17 +132,14 @@ public class ClientHandler extends Thread {
 						objectOutputStream.writeObject(response);
 						objectOutputStream.flush();
 					}
-
 					// send chat creation request
 					else if (objectIn.getType() == MESSAGETYPE.ADD_CHAT) {
 						Server.addChatToList(objectIn.getSender().getID(), objectIn.getChatID());
 						user = Server.getAccount(objectIn.getUsername());
-
-                        // return UserAccount to user for displaying chats
-                        objectOutputStream.writeObject(user);
-                        objectOutputStream.flush();
+						user.updateList();
+						objectOutputStream.writeObject(user.getChatList());
+						objectOutputStream.flush();
 					}
-
 					// send chat removal request
 					else if (objectIn.getType() == MESSAGETYPE.REMOVE_CHAT) {
 						Server.removeChatFromList(objectIn.getSender().getID(), objectIn.getChatID());

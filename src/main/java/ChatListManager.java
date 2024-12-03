@@ -82,13 +82,14 @@ public class ChatListManager {
         if (userID.equals("1")) {
             return;
         }
-        
+        if (userChats.contains(chatID)) {
+            return;
+        }
         // Add the new chatID to the list
         userChats.add(chatID);
         
         // Update the map with new list
         chatLists.put(userID, userChats);
-        
         // Update the file to reflect changes
         updateFile();
     }
