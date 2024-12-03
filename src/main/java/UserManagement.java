@@ -6,7 +6,7 @@ import java.nio.file.Paths;
 import java.util.*;
 
 
-public class UserManagement {
+public class UserManagement implements Serializable {
     // File path for storing user credentials
     private static final String USER_FILE = "src/main/java/useraccounts.txt";
     
