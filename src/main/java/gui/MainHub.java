@@ -174,6 +174,11 @@ public class MainHub extends JFrame{
 		if (owner.getAccessLevel() == 1) {
 			itButton.setEnabled(false);
 		}
+		else {
+			createGroupChatButton.setEnabled(false);
+			deleteChatButton.setEnabled(false);
+			openChatButton.setEnabled(false);
+		}
 		
 		buttonContainer.setLayout(new BoxLayout(buttonContainer, BoxLayout.X_AXIS));
 		buttonContainer.add(itButton);
