@@ -111,7 +111,7 @@ public class ClientHandler extends Thread {
 					// send chat list request
 					else if (objectIn.getType() == MESSAGETYPE.GET_CHATLIST) {
 						String userID = objectIn.getContent(); // Get userID from content
-
+						
 						// Get chat IDs from server's ChatListManager
 						List<Integer> chatIDs = Server.getUserChatList(userID);
 
@@ -137,6 +137,11 @@ public class ClientHandler extends Thread {
 					// send chat creation request
 					else if (objectIn.getType() == MESSAGETYPE.ADD_CHAT) {
 						Server.addChatToList(objectIn.getSender().getID(), objectIn.getChatID());
+						user = Server.getAccount(objectIn.getUsername());
+
+                        // return UserAccount to user for displaying chats
+                        objectOutputStream.writeObject(user);
+                        objectOutputStream.flush();
 					}
 
 					// send chat removal request
