@@ -50,9 +50,10 @@ public class MainHub extends JFrame{
 	boolean closing = false;
 	boolean roomSelected = false;
 	Message msgObject;
-	JList chatList;
+	JList<String> chatList = new JList();
 	AllRecord record;
 	AdminPanel admin;
+	JScrollPane scrollPane;
 	
 	// STREAMS
 	Socket socket;
@@ -120,6 +121,12 @@ public class MainHub extends JFrame{
 								displayRecord();
 								continue;
 							}
+							else if (object instanceof ChatList) {
+								ChatList chat = (ChatList) object;
+								owner.setList(chat);
+								userChatList = owner.getChatList();
+								chatList.setListData(userChatList.getChatListForDisplay());
+							}
 							// check if the chatID matches with user's chat list. Update that chat history
 							// messages if matched.
 							SwingUtilities.invokeLater(() -> {
@@ -158,7 +165,7 @@ public class MainHub extends JFrame{
 		// CHAT LIST
 		// MODIFIED NOVEMBER 26
 		chatList = new JList(userChatList.getChatListForDisplay());
-		JScrollPane scrollPane = new JScrollPane(chatList);
+		scrollPane = new JScrollPane(chatList);
 		scrollPane.setPreferredSize(new Dimension(200,200));
 		//JList chatList = new JList(new String[] {"Chat rooms to be display here"});
         chatsContainer.add(scrollPane);
@@ -269,6 +276,7 @@ public class MainHub extends JFrame{
 				else {
 					Message msg = new Message();
 					msg.setMessageType(MESSAGETYPE.ADD_CHAT);
+					msg.setUsername(owner.getUsername());
 					msg.setUser(owner);
 					try {
 						msg.setID(Integer.parseInt(chatId));
@@ -277,6 +285,10 @@ public class MainHub extends JFrame{
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+					
+					
+					
+					
 				}
 			}
 			
@@ -307,8 +319,11 @@ public class MainHub extends JFrame{
 	private void displayRecord() {
 		JFrame recordFrame = new JFrame();
 		
-		Map<Integer, ConversationHistory> histories = record.getHistories(); // TODO: <- do something. It's a hash-map
+		// grab the history has-map
+		Map<Integer, ConversationHistory> histories = record.getHistories();
+		// StringBuilder to store all the history as String
 		StringBuilder historyList = new StringBuilder();
+		// iterate through all key, then append the key as chatID then append its history
 		for (Map.Entry<Integer, ConversationHistory> entry : histories.entrySet()) {
 			historyList.append("Chat ").append(entry.getKey()).append(":\n");
 			for (String msg : entry.getValue().getMessageList()) {
@@ -317,10 +332,10 @@ public class MainHub extends JFrame{
 			historyList.append("\n");
 		}
 		
+		// display the StringBuilder
 		JTextArea textArea = new JTextArea();
         textArea.setEditable(false); // read only
         textArea.setText(historyList.toString());
-        
         JScrollPane scrollPane = new JScrollPane(textArea);
         recordFrame.add(scrollPane);
         
@@ -332,6 +347,7 @@ public class MainHub extends JFrame{
 		mainFrame.setVisible(false);
 		admin.close();
 		
+		// Closing handling
 	    recordFrame.addWindowListener(new WindowAdapter() {
 	        @Override
 	        public void windowClosing(WindowEvent e) {

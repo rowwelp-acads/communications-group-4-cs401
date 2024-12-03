@@ -120,7 +120,6 @@ public class ClientHandler extends Thread {
 						objectOutputStream.writeObject(response);
 						objectOutputStream.flush();
 					}
-
 					// send chat history request
 					else if (objectIn.getType() == MESSAGETYPE.GETHISTORY) {
 						int chatID = objectIn.getChatID();
@@ -133,12 +132,14 @@ public class ClientHandler extends Thread {
 						objectOutputStream.writeObject(response);
 						objectOutputStream.flush();
 					}
-
 					// send chat creation request
 					else if (objectIn.getType() == MESSAGETYPE.ADD_CHAT) {
 						Server.addChatToList(objectIn.getSender().getID(), objectIn.getChatID());
+						user = Server.getAccount(objectIn.getUsername());
+						user.updateList();
+						objectOutputStream.writeObject(user.getChatList());
+						objectOutputStream.flush();
 					}
-
 					// send chat removal request
 					else if (objectIn.getType() == MESSAGETYPE.REMOVE_CHAT) {
 						Server.removeChatFromList(objectIn.getSender().getID(), objectIn.getChatID());

@@ -51,12 +51,19 @@ public abstract class UserAccount implements Serializable {
         this.chatList = new ChatList(this, in, out); // Ensure ChatList has this constructor
     }
 
+    public void updateList() {
+    	this.chatList = new ChatList(this);
+    }
     // Default Constructor
     public UserAccount() {}
 
     // Getter and Setter methods
     public String getID() {
         return id;
+    }
+    
+    public void setList(ChatList newChatList) {
+    	chatList = newChatList;
     }
 
     public void setUserId(String userId) {

@@ -1,6 +1,6 @@
 ChatListID:1
-1,0
+0
 ChatListID:2
-1,2
+1,2,3,4
 ChatListID:3
 1
