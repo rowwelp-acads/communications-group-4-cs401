@@ -80,7 +80,7 @@ public class AdminPanel {
 			addAccount();
 		} else {
 			msg.setUsername(username);
-			String pass = JOptionPane.showInputDialog(adminFrame, "Enter username of user to be added: ", null);
+			String pass = JOptionPane.showInputDialog(adminFrame, "Enter password of user to be added: ", null);
 			if (pass == null) {
 				return;
 			} 
