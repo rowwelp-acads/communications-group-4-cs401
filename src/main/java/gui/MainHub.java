@@ -120,6 +120,11 @@ public class MainHub extends JFrame{
 								displayRecord();
 								continue;
 							}
+							else if(object instanceof UserAccount) {
+								owner = (UserAccount) object;
+								userChatList = owner.getChatList();
+								
+							}
 							// check if the chatID matches with user's chat list. Update that chat history
 							// messages if matched.
 							SwingUtilities.invokeLater(() -> {
@@ -277,6 +282,10 @@ public class MainHub extends JFrame{
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+					
+					
+					
+					
 				}
 			}
 			
