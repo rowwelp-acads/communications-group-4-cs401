@@ -103,6 +103,7 @@ public class MainHub extends JFrame{
 			e.printStackTrace();
 		}
 		
+	
 		// Background thread to listen to Server
 		new Thread(new Runnable() {
 
@@ -131,7 +132,10 @@ public class MainHub extends JFrame{
 							// messages if matched.
 							SwingUtilities.invokeLater(() -> {
 								// add the message to convoHistory
-								owner.addMessage(msgObject);
+								if(msgObject != null) {
+									owner.addMessage(msgObject);
+								}
+								
 								
 								// if the message also belong to the current active chat room, update its GUI to display the new history
 								if (currentChatRoom != null && msgObject.getChatID() == currentChatRoom.getChatID()) {
