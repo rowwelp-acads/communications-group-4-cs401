@@ -11,7 +11,7 @@ public class Server {
     // This Map keeps track of all connected clients
     // Key: client ID (String), Value: the client's handler
     // Collections.synchronizedMap makes it thread-safe (prevents errors when multiple clients connect/disconnect)
-    private static Map<String, ClientHandler> clients = Collections.synchronizedMap(new HashMap<>());
+    private static Map<String, ClientHandler> clients = Collections.synchronizedMap(new HashMap<>()); 
     
     // Will hold all UserAccount's designated chatList 
     // KA
@@ -134,7 +134,7 @@ public class Server {
     }
     
     public static UserAccount getAccount(String username) {
-    	return userDatabase.getAccount(username);
+    	return userDatabase.getUserAccount(username);
     }
     
     // Method to get user's chat list IDs
