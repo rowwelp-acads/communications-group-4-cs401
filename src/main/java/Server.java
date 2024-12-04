@@ -24,6 +24,11 @@ public class Server {
     private static ConversationLog serverLog;
     
     public static void main(String[] args) {
+	Server server = new Server();
+	    server.start();
+    }
+
+	public void start(){
         try {
         	chatList = new ArrayList<>();
         	chatListManager = new ChatListManager();
@@ -49,8 +54,14 @@ public class Server {
             // If something goes wrong, print the error
             e.printStackTrace();
         }
-    }
-    
+	}
+	public void testStartDatabase(){
+		chatList = new ArrayList<>();
+        	chatListManager = new ChatListManager();
+        	serverLog = new ConversationLog();
+        	userDatabase = new UserManagement();
+	}
+	
     /*
      * method to broadcast messages
      * called in ClientHandler
