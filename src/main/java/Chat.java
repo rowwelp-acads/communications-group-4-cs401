@@ -22,6 +22,14 @@ public class Chat implements Serializable{
 		// TEST HERE
 		history.getHistoryFromServer();
 	}
+	
+	public Chat(UserAccount owner, int newUniqueID, boolean test) {
+		creator = owner;
+		uniqueID = newUniqueID;
+		history = new ConversationHistory(uniqueID);
+		participants = new ArrayList<>();
+		// TEST HERE
+	}
 
 	public Chat(UserAccount owner) {
 		creator = owner;
@@ -80,9 +88,7 @@ public class Chat implements Serializable{
 	        participants.remove(userToRemove);
 
 	        // Broadcast Message that User has left a chat
-	        String systemMessageContent = username + " has left the chat.";
-	        Message systemMessage = new Message(systemMessageContent, null);
-	        history.addMessage(systemMessage);
+	        System.out.println(username + " has left the chat.");
 	        
 	        System.out.println("User " + username + " removed from chat.");
 	        return true; // Participant has been found in list and removed. 
