@@ -20,8 +20,6 @@ You may read more about our Software Requirements Specification here:
 You may find our Design Specifications here:
 [Design Document](https://github.com/rowwelp-acads/communications-group-4-cs401/blob/7a08868677f5d69d662e2dc536f509b804b8c8d9/Documentation/Group%204%20-%20Design%20Document.pdf)
 
-# Multi-Client Chat Application
-
 # Enterprise Communications System
 ## Project Structure
 This application consists of server-side components, client-side components, and GUI elements that work together to create an enterprise communications system.
