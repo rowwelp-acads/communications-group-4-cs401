@@ -1,13 +1,13 @@
 package testing;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import org.junit.platform.suite.api.SelectClasses;
+import org.junit.platform.suite.api.Suite;
 
-@RunWith(Suite.class)
-
-@Suite.SuiteClasses({
+@Suite
+@SelectClasses({
 	UserAccount_Testing.class,
-	ConvoLogTest.class
+	ConvoLogTest.class,
+	chatTest.class
 })
 
 public class AllTests {
