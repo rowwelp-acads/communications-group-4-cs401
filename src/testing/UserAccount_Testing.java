@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.runners.Suite;
 import main.java.UserAccount;
 import main.java.RegularUser;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class UserAccount_Testing {
 	
